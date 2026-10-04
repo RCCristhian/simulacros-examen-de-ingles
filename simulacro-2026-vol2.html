@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacros de Ascenso 2026 (Vol. 2) - Inglés</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: #1e1e1e; max-width: 700px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ffffff; font-size: 26px; margin-bottom: 5px; }
+        h2 { text-align: center; color: #b0bec5; font-size: 16px; margin-top: 0; margin-bottom: 30px; }
+        
+        /* Menu styles */
+        #menu { display: flex; flex-direction: column; gap: 15px; }
+        .menu-btn { background: #00796b; color: white; border: none; padding: 20px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.2s; text-align: left;}
+        .menu-btn:hover { background: #004d40; }
+        .menu-btn span { display: block; font-size: 14px; font-weight: normal; margin-top: 5px; opacity: 0.9;}
+        
+        /* Quiz styles */
+        #quiz-container { display: none; }
+        .question-container { display: none; }
+        .question-container.active { display: block; }
+        .question-text { font-size: 17px; line-height: 1.6; margin-bottom: 20px; font-weight: 500; text-align: justify; color: #e0e0e0; }
+        .option { display: block; width: 100%; text-align: left; background: #2c2c2c; border: 1px solid #424242; padding: 15px; margin-bottom: 12px; border-radius: 8px; cursor: pointer; font-size: 15px; transition: all 0.2s; line-height: 1.4; color: #e0e0e0; }
+        .option:hover { background: #3d3d3d; }
+        .option.correct { background: #1b5e20; border-color: #2e7d32; color: #c8e6c9; pointer-events: none; }
+        .option.incorrect { background: #b71c1c; border-color: #c62828; color: #ffcdd2; pointer-events: none; }
+        .option:disabled { cursor: default; }
+        
+        #feedback { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; font-weight: bold; text-align: center; font-size: 16px;}
+        .feedback-correct { background: #1b5e20; color: #c8e6c9; border: 1px solid #2e7d32; }
+        .feedback-incorrect { background: #b71c1c; color: #ffcdd2; border: 1px solid #c62828; }
+        
+        .btn-next { display: none; width: 100%; padding: 15px; margin-top: 20px; background: #00796b; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s;}
+        .btn-next:hover { background: #004d40; }
+        
+        /* Utility */
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 10px;}
+        .back-btn { background: none; border: none; color: #4db6ac; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: underline;}
+        .progress { font-size: 14px; color: #b0bec5; font-weight: bold;}
+        
+        #result-screen { display: none; text-align: center; }
+        .score { font-size: 54px; font-weight: bold; color: #4db6ac; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulacros de Ascenso 2026 (Vol. 2)</h1>
+        <h2>Especialidad: Inglés como Lengua Extranjera</h2>
+        
+        <!-- Menu Section -->
+        <div id="menu">
+            <p style="text-align: center; color: #b0bec5; margin-bottom: 10px;">Seleccione el simulacro que desea realizar. Ambos contienen <strong>preguntas 100% nuevas</strong> basadas en el Temario 2026.</p>
+            <button class="menu-btn" onclick="startQuiz(1)">
+                Opción 3: Didáctica Especializada
+                <span>20 Preguntas (Reading, Listening, Procesos Cognitivos y Evaluación).</span>
+            </button>
+            <button class="menu-btn" onclick="startQuiz(2)">
+                Opción 4: Speaking, Writing y Planificación
+                <span>20 Preguntas (Expresión oral, enfoques de escritura, Feedback y DUA).</span>
+            </button>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz-container">
+            <div class="header-bar">
+                <button class="back-btn" onclick="location.reload()">← Volver al Menú</button>
+                <div id="progress-text" class="progress"></div>
+            </div>
+            
+            <div id="quiz-area">
+                <!-- Questions injected here by JS -->
+            </div>
+            
+            <div id="feedback"></div>
+            <button id="btn-next" class="btn-next" onclick="nextQuestion()">Siguiente Pregunta</button>
+        </div>
+
+        <!-- Result Section -->
+        <div id="result-screen">
+            <h2>¡Simulacro Finalizado!</h2>
+            <p>Este es tu puntaje en esta prueba:</p>
+            <div class="score" id="final-score">0 / 0</div>
+            <p id="final-message"></p>
+            <button class="btn-next" style="display:block; margin-top: 30px;" onclick="location.reload()">Volver al Menú Principal</button>
+        </div>
+    </div>
+
+    <script>
+        const simulacros = {
+            1: [{"id": 1, "text": "A teacher provides students with a biography of a famous scientist and asks them to quickly find the exact year he won the Nobel Prize. Which reading skill is the teacher promoting?", "options": [{"id": "A", "text": "Skimming."}, {"id": "B", "text": "Scanning."}, {"id": "C", "text": "Predicting."}], "correct": "B"}, {"id": 2, "text": "The school has implemented a new methodology where students watch grammar explanations and complete interactive exercises on an online platform at home, and then use class time purely for speaking and communicative tasks. Which methodology is being applied?", "options": [{"id": "A", "text": "Task-Based Learning."}, {"id": "B", "text": "Project-Based Learning."}, {"id": "C", "text": "Blended Learning."}], "correct": "C"}, {"id": 3, "text": "A student says: 'My friend gave me some good advices.' The teacher shows the student a dictionary entry indicating that 'advice' is an uncountable noun. The student realizes his previous assumption was wrong and adjusts his understanding. What cognitive process did the teacher trigger?", "options": [{"id": "A", "text": "Meaningful learning."}, {"id": "B", "text": "Cognitive conflict (Disonancia cognitiva)."}, {"id": "C", "text": "Scaffolding."}], "correct": "B"}, {"id": 4, "text": "After a group presentation, the teacher asks each student to complete a short questionnaire assessing their own performance, effort, and areas for improvement. Which type of evaluation is this?", "options": [{"id": "A", "text": "Peer-assessment."}, {"id": "B", "text": "Self-assessment."}, {"id": "C", "text": "Summative assessment."}], "correct": "B"}, {"id": 5, "text": "While reading a story, a student encounters the word 'exhausted'. Instead of translating it, the teacher points out the surrounding sentence: 'After running the marathon, he felt completely exhausted and slept for 12 hours.' The student guesses the meaning. Which skill is this?", "options": [{"id": "A", "text": "Deducing meaning from context."}, {"id": "B", "text": "Paraphrasing."}, {"id": "C", "text": "Summarizing."}], "correct": "A"}, {"id": 6, "text": "Before playing an audio about climate change, the teacher asks students what they already know about the topic to activate their background knowledge. When listening, students use this knowledge to understand the general message. Which type of processing is this?", "options": [{"id": "A", "text": "Bottom-up processing."}, {"id": "B", "text": "Top-down processing."}, {"id": "C", "text": "Intensive listening."}], "correct": "B"}, {"id": 7, "text": "The teacher organizes a lesson around the importance of recycling and reducing plastic use in the community. Students create posters in English to promote environmental awareness in the school. Which transversal approach is being prioritized?", "options": [{"id": "A", "text": "Intercultural Approach."}, {"id": "B", "text": "Environmental Approach (Enfoque Ambiental)."}, {"id": "C", "text": "Inclusive Approach."}], "correct": "B"}, {"id": 8, "text": "To foster a habit of reading, the teacher tells the students to choose any graded reader from the library and read it over the weekend for their own enjoyment, without any mandatory comprehension quizzes. What is this approach called?", "options": [{"id": "A", "text": "Intensive reading."}, {"id": "B", "text": "Extensive reading."}, {"id": "C", "text": "Scanning."}], "correct": "B"}, {"id": 9, "text": "During the drafting stage of an essay, the teacher reviews the students' paragraphs and leaves comments suggesting how to connect their ideas better, without giving a final grade. Which type of assessment is the teacher providing?", "options": [{"id": "A", "text": "Diagnostic assessment."}, {"id": "B", "text": "Formative assessment."}, {"id": "C", "text": "Summative assessment."}], "correct": "B"}, {"id": 10, "text": "When teaching vocabulary about daily routines, the teacher asks the students to describe what their actual families do on a typical Sunday in their hometown. Which pedagogical principle is the teacher applying?", "options": [{"id": "A", "text": "Meaningful learning (Aprendizajes significativos)."}, {"id": "B", "text": "Rote memorization."}, {"id": "C", "text": "Deductive learning."}], "correct": "A"}, {"id": 11, "text": "The teacher gives the students a two-page article and gives them exactly one minute to tell her what the main topic of the article is. Which reading skill is she testing?", "options": [{"id": "A", "text": "Skimming."}, {"id": "B", "text": "Scanning."}, {"id": "C", "text": "Categorizing."}], "correct": "A"}, {"id": 12, "text": "Instead of explaining the rules for forming the comparative degree, the teacher shows pictures of two animals and provides examples: 'The elephant is bigger than the dog.' 'The cheetah is faster than the turtle.' The students figure out the '-er than' rule themselves. Which approach is this?", "options": [{"id": "A", "text": "Deductive approach."}, {"id": "B", "text": "Inductive approach."}, {"id": "C", "text": "Product approach."}], "correct": "B"}, {"id": 13, "text": "Students listen to a conversation between a customer and a waiter. The customer says: 'Oh, brilliant! Just what I wanted! A fly in my soup.' The teacher asks: 'Is the customer really happy?' Which listening skill is being promoted?", "options": [{"id": "A", "text": "Listening for details."}, {"id": "B", "text": "Inferring attitude."}, {"id": "C", "text": "Detecting connectors."}], "correct": "B"}, {"id": 14, "text": "The teacher gives students a list of 20 words related to the environment. She asks them to group the words under three headings: 'Natural Disasters', 'Pollution', and 'Solutions'. Which reading/vocabulary skill is this?", "options": [{"id": "A", "text": "Categorizing."}, {"id": "B", "text": "Ordering."}, {"id": "C", "text": "Summarizing."}], "correct": "A"}, {"id": 15, "text": "According to the syllabus, teachers should prioritize 'use' (communicative meaning) over 'usage' (rules). Which activity reflects this?", "options": [{"id": "A", "text": "Completing a 20-question multiple choice test on present perfect rules."}, {"id": "B", "text": "Role-playing a doctor's appointment where students describe symptoms they have had lately."}, {"id": "C", "text": "Writing the past participle forms of 50 irregular verbs on the board."}], "correct": "B"}, {"id": 16, "text": "A student struggles to organize an essay. The teacher provides a graphic organizer with sentence starters (e.g., 'First of all...', 'On the other hand...') to help the student structure the text. What pedagogical concept is the teacher using?", "options": [{"id": "A", "text": "Scaffolding (Andamiaje)."}, {"id": "B", "text": "Metacognition."}, {"id": "C", "text": "High cognitive demand."}], "correct": "A"}, {"id": 17, "text": "Before starting a reading about traditional festivals, the teacher writes the word 'FESTIVAL' on the board and asks students to shout out any words they associate with it. What is the main purpose of this activity?", "options": [{"id": "A", "text": "To evaluate their spelling."}, {"id": "B", "text": "To activate prior knowledge (Saberes previos)."}, {"id": "C", "text": "To create cognitive conflict."}], "correct": "B"}, {"id": 18, "text": "The teacher plays an audio of an airport announcement and asks the students to listen specifically for the gate number of flight LA204. Which listening skill is being practiced?", "options": [{"id": "A", "text": "Listening for specific information."}, {"id": "B", "text": "Listening for gist."}, {"id": "C", "text": "Inferring meaning."}], "correct": "A"}, {"id": 19, "text": "When introducing a new topic, a teacher uses a mix of visual aids (pictures), audio (a song), and text (a short paragraph) so that all students can access the information regardless of their learning style. Which DUA principle is applied?", "options": [{"id": "A", "text": "Multiple means of engagement."}, {"id": "B", "text": "Multiple means of representation."}, {"id": "C", "text": "Multiple means of action and expression."}], "correct": "B"}, {"id": 20, "text": "At the end of a unit, the teacher asks the students: 'What strategies helped you learn the new vocabulary best? Flashcards, repeating, or reading?' This question promotes:", "options": [{"id": "A", "text": "Cognitive dissonance."}, {"id": "B", "text": "Metacognition."}, {"id": "C", "text": "Summative assessment."}], "correct": "B"}],
+            2: [{"id": 1, "text": "A teacher designs a writing sequence: first the students brainstorm ideas, then they write a draft, next they exchange drafts for peer review, and finally, they edit and publish their work. Which approach to writing is the teacher using?", "options": [{"id": "A", "text": "Product writing."}, {"id": "B", "text": "Process writing."}, {"id": "C", "text": "Genre approach."}], "correct": "B"}, {"id": 2, "text": "During a free role-play activity where students are pretending to order food in a restaurant, a student says 'I want two coffees, please' instead of 'I would like'. The teacher decides not to correct the student to avoid interrupting the flow of the conversation. What is the teacher prioritizing?", "options": [{"id": "A", "text": "Accuracy."}, {"id": "B", "text": "Fluency."}, {"id": "C", "text": "Pronunciation."}], "correct": "B"}, {"id": 3, "text": "A student's essay has good ideas, but the sentences seem disconnected. The teacher tells the student to use words like 'Furthermore', 'However', and 'Therefore'. Which aspect of the text is the teacher trying to improve?", "options": [{"id": "A", "text": "Cohesion."}, {"id": "B", "text": "Coherence."}, {"id": "C", "text": "Format."}], "correct": "A"}, {"id": 4, "text": "When assessing an oral presentation, the teacher uses a rubric that evaluates eye contact, body posture, and hand gestures. Which sources of oral communication are being assessed?", "options": [{"id": "A", "text": "Paraverbal sources."}, {"id": "B", "text": "Nonverbal sources."}, {"id": "C", "text": "Grammatical accuracy."}], "correct": "B"}, {"id": 5, "text": "Over the course of a month, students research local tourist spots, interview tourists, take photos, and collaboratively create an English tourist guide for their city as a final product. Which methodology is this?", "options": [{"id": "A", "text": "Task-Based Learning."}, {"id": "B", "text": "Project-Based Learning."}, {"id": "C", "text": "Presentation-Practice-Production."}], "correct": "B"}, {"id": 6, "text": "The teacher divides the class in two groups. One group must defend the use of artificial intelligence in schools, and the other group must argue against it. Which speaking capacity is mainly being developed?", "options": [{"id": "A", "text": "Developing argumentation skills."}, {"id": "B", "text": "Using paraverbal sources."}, {"id": "C", "text": "Summarizing information."}], "correct": "A"}, {"id": 7, "text": "The teacher provides a formal academic text about healthy eating and asks the students to rewrite the core message as a casual, friendly WhatsApp message to a friend. Which writing skill is being practiced?", "options": [{"id": "A", "text": "Using written language conventions."}, {"id": "B", "text": "Adapting texts according to the communicative situation."}, {"id": "C", "text": "Organizing ideas in a cohesive way."}], "correct": "B"}, {"id": 8, "text": "A student says: 'Yesterday I buyed a new book.' The teacher smiles and responds naturally: 'Oh, you bought a new book? What is it about?' Which feedback technique did the teacher use?", "options": [{"id": "A", "text": "Explicit correction."}, {"id": "B", "text": "Clarification request."}, {"id": "C", "text": "Recast."}], "correct": "C"}, {"id": 9, "text": "The teacher gives students a model of a formal complaint letter. The students must analyze the structure and write a very similar letter, strictly following the layout and phrasing of the model. Which approach to writing is this?", "options": [{"id": "A", "text": "Process writing."}, {"id": "B", "text": "Product writing."}, {"id": "C", "text": "Free writing."}], "correct": "B"}, {"id": 10, "text": "During an oral reading activity, the teacher asks the students to pay attention to their intonation, volume, and rhythm when reading a poem aloud. Which aspect of oral production is the teacher focusing on?", "options": [{"id": "A", "text": "Nonverbal sources."}, {"id": "B", "text": "Paraverbal sources."}, {"id": "C", "text": "Cohesion."}], "correct": "B"}, {"id": 11, "text": "The teacher starts the class by writing the formula for the Second Conditional on the board, explains when to use it, and then gives the students a worksheet with fill-in-the-blanks exercises. Which grammar approach is this?", "options": [{"id": "A", "text": "Inductive approach."}, {"id": "B", "text": "Deductive approach."}, {"id": "C", "text": "Communicative approach."}], "correct": "B"}, {"id": 12, "text": "When a student forgets a word during a speech, the teacher pauses, makes a gesture, and says 'You went to the...?' waiting for the student to remember and say 'cinema'. What is this technique called?", "options": [{"id": "A", "text": "Elicitation."}, {"id": "B", "text": "Recast."}, {"id": "C", "text": "Delayed correction."}], "correct": "A"}, {"id": 13, "text": "During a free speaking fluency activity, the teacher walks around with a notebook, writing down the most common grammar mistakes students make. Ten minutes before the class ends, she writes them on the board and discusses them with the whole class. What is this called?", "options": [{"id": "A", "text": "Immediate feedback."}, {"id": "B", "text": "Delayed feedback / correction."}, {"id": "C", "text": "Peer assessment."}], "correct": "B"}, {"id": 14, "text": "Students have already revised the content and structure of their essays. The teacher now asks them to check for spelling errors, capitalization, and punctuation marks. Which stage of the writing process is this?", "options": [{"id": "A", "text": "Drafting."}, {"id": "B", "text": "Revising."}, {"id": "C", "text": "Editing."}], "correct": "C"}, {"id": 15, "text": "A teacher has a student with a visual impairment in the classroom. When presenting a reading text, the teacher provides the text in a larger font and also an audio version of it. Which pedagogical principle is she applying?", "options": [{"id": "A", "text": "Inclusive Education."}, {"id": "B", "text": "Cognitive Conflict."}, {"id": "C", "text": "Summative Evaluation."}], "correct": "A"}, {"id": 16, "text": "In a listening activity, the teacher asks the students to focus on distinguishing the difference between the sounds /\u026a/ (as in 'ship') and /i:/ (as in 'sheep'). Which type of listening processing is this?", "options": [{"id": "A", "text": "Top-down processing."}, {"id": "B", "text": "Bottom-up processing."}, {"id": "C", "text": "Extensive listening."}], "correct": "B"}, {"id": 17, "text": "Instead of asking students to memorize a list of vocabulary, the teacher asks them to evaluate a controversial article and create their own counter-arguments in English. According to pedagogical principles, this activity has:", "options": [{"id": "A", "text": "Low cognitive demand."}, {"id": "B", "text": "High cognitive demand."}, {"id": "C", "text": "No cognitive conflict."}], "correct": "B"}, {"id": 18, "text": "After reading a 3-page story, the teacher asks the students to write a short paragraph containing only the most essential events of the plot. Which skill is being developed?", "options": [{"id": "A", "text": "Paraphrasing."}, {"id": "B", "text": "Summarizing."}, {"id": "C", "text": "Predicting."}], "correct": "B"}, {"id": 19, "text": "After a debate, the teacher asks the students to evaluate the arguments and fluency of the opposing team using a checklist. What type of assessment is this?", "options": [{"id": "A", "text": "Self-assessment."}, {"id": "B", "text": "Peer-assessment."}, {"id": "C", "text": "Summative assessment."}], "correct": "B"}, {"id": 20, "text": "The teacher sets up a situation: 'You are planning a surprise party for a friend.' The students work in groups to decide the food, music, and guests. After they complete the activity, the teacher highlights the language they needed (e.g., 'Let's buy...', 'How about...'). Which methodology is this?", "options": [{"id": "A", "text": "Presentation-Practice-Production (PPP)."}, {"id": "B", "text": "Content-Based Learning."}, {"id": "C", "text": "Task-Based Learning."}], "correct": "C"}]
+        };
+        
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const menu = document.getElementById('menu');
+        const quizContainer = document.getElementById('quiz-container');
+        const quizArea = document.getElementById('quiz-area');
+        const progressText = document.getElementById('progress-text');
+        const feedbackArea = document.getElementById('feedback');
+        const btnNext = document.getElementById('btn-next');
+        const resultScreen = document.getElementById('result-screen');
+
+        function startQuiz(quizId) {
+            currentQuestions = simulacros[quizId];
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            menu.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const oldNodes = quizArea.querySelectorAll('.question-container');
+            oldNodes.forEach(node => node.remove());
+            
+            feedbackArea.style.display = 'none';
+            btnNext.style.display = 'none';
+
+            progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
+
+            const q = currentQuestions[currentQuestionIndex];
+            
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-container active';
+            
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerHTML = q.text.replace(/\n/g, '<br>');
+            qDiv.appendChild(qText);
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerHTML = `<strong>${String.fromCharCode(65 + index)})</strong> ${opt.text}`;
+                btn.onclick = () => selectAnswer(btn, opt.id, q.correct);
+                btn.dataset.id = opt.id;
+                qDiv.appendChild(btn);
+            });
+
+            quizArea.appendChild(qDiv);
+        }
+
+        function selectAnswer(selectedBtn, selectedId, correctId) {
+            const buttons = document.querySelectorAll('.option');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedId === correctId) {
+                selectedBtn.classList.add('correct');
+                feedbackArea.textContent = '¡Correcto! Excelente análisis pedagógico.';
+                feedbackArea.className = 'feedback-correct';
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+                const correctBtn = document.querySelector(`.option[data-id="${correctId}"]`);
+                if (correctBtn) correctBtn.classList.add('correct');
+                
+                feedbackArea.textContent = `Incorrecto. La alternativa correcta era la ${correctId}.`;
+                feedbackArea.className = 'feedback-incorrect';
+            }
+
+            feedbackArea.style.display = 'block';
+            btnNext.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuestions.length) {
+                renderQuestion();
+                window.scrollTo(0,0);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            document.getElementById('final-score').textContent = `${score} / ${currentQuestions.length}`;
+            
+            let message = '';
+            const percentage = score / currentQuestions.length;
+            if (percentage >= 0.8) {
+                message = '¡Excelente trabajo! Tienes muy claro el temario del MINEDU.';
+            } else if (percentage >= 0.6) {
+                message = '¡Buen esfuerzo! Sigue repasando los enfoques didácticos y términos pedagógicos.';
+            } else {
+                message = 'Sigue practicando. Leer detenidamente la casuística es la clave del éxito.';
+            }
+            document.getElementById('final-message').textContent = message;
+        }
+    </script>
+</body>
+</html>
