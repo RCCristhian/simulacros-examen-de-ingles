@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro 2026 Final 3 - 60 Preguntas</title>
+    <style>
+        :root {
+            --bg-body: #121212; --bg-container: #1e1e1e; --text-main: #e0e0e0; --text-muted: #b0bec5;
+            --btn-bg: #2c2c2c; --btn-border: #424242; --btn-hover: #3d3d3d;
+            --primary: #00796b; --primary-hover: #004d40;
+            --correct-bg: #1b5e20; --correct-border: #2e7d32; --correct-text: #c8e6c9;
+            --incorrect-bg: #b71c1c; --incorrect-border: #c62828; --incorrect-text: #ffcdd2;
+            --explanation-bg: #263238; --explanation-border: #37474f; --explanation-text: #e0f7fa;
+        }
+        body.light-theme {
+            --bg-body: #f4f7f6; --bg-container: #ffffff; --text-main: #333333; --text-muted: #666666;
+            --btn-bg: #f8f9fa; --btn-border: #dee2e6; --btn-hover: #e9ecef;
+            --primary: #00897b; --primary-hover: #00695c;
+            --correct-bg: #d4edda; --correct-border: #c3e6cb; --correct-text: #155724;
+            --incorrect-bg: #f8d7da; --incorrect-border: #f5c6cb; --incorrect-text: #721c24;
+            --explanation-bg: #e0f2f1; --explanation-border: #b2dfdb; --explanation-text: #004d40;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        .container { background: var(--bg-container); max-width: 800px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .top-controls { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .theme-btn, .lang-btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .theme-btn:hover, .lang-btn:hover { background: var(--primary-hover); }
+        h1 { text-align: center; font-size: 26px; margin-bottom: 5px; }
+        h2 { text-align: center; color: var(--text-muted); font-size: 16px; margin-top: 0; margin-bottom: 20px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid var(--btn-border); padding-bottom: 10px; }
+        .progress { font-size: 14px; color: var(--text-muted); font-weight: bold; }
+        .exam-info { color: var(--primary); font-size: 14px; font-weight: bold; }
+        .question-text { font-size: 18px; line-height: 1.6; margin-bottom: 20px; font-weight: 500; text-align: justify; }
+        .option { display: block; width: 100%; text-align: left; background: var(--btn-bg); border: 2px solid var(--btn-border); padding: 15px; margin-bottom: 12px; border-radius: 8px; cursor: pointer; font-size: 16px; line-height: 1.4; color: var(--text-main); }
+        .option:hover { background: var(--btn-hover); }
+        .option.correct { background: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); pointer-events: none; }
+        .option.incorrect { background: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); pointer-events: none; }
+        .option:disabled { cursor: default; opacity: 0.85; }
+        #feedback { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; font-weight: bold; text-align: center; font-size: 18px; }
+        .feedback-correct { background: var(--correct-bg); color: var(--correct-text); border: 1px solid var(--correct-border); }
+        .feedback-incorrect { background: var(--incorrect-bg); color: var(--incorrect-text); border: 1px solid var(--incorrect-border); }
+        #explanation-box { margin-top: 15px; padding: 20px; border-radius: 8px; display: none; background: var(--explanation-bg); border: 1px solid var(--explanation-border); color: var(--explanation-text); font-size: 15px; line-height: 1.6; text-align: justify; }
+        .btn-next, .btn-restart { display: none; width: 100%; padding: 18px; margin-top: 25px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-next:hover, .btn-restart:hover { background: var(--primary-hover); }
+        #result-screen { display: none; text-align: center; }
+        .score { font-size: 54px; font-weight: bold; color: var(--primary); margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-controls">
+            <a href="index.html" class="theme-btn" style="text-decoration:none; display:inline-flex; align-items:center;">🏠 Menú Principal</a>
+            <div style="display:flex; gap:10px;">
+                <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️ Cambiar a Modo Claro</button>
+                <button class="lang-btn" onclick="toggleLanguage()" id="lang-btn">🇬🇧 Leer en Español / English</button>
+            </div>
+        </div>
+        <h1>Simulacro 2026 Final 3</h1>
+        <h2>Ascenso EBR Secundaria - Inglés como Lengua Extranjera</h2>
+        <div id="quiz-container">
+            <div class="header-bar">
+                <div class="exam-info">60 Preguntas (45 Casos + 15 Cloze Test)</div>
+                <div id="progress-text" class="progress"></div>
+            </div>
+            <div id="quiz-area"></div>
+            <div id="feedback"></div>
+            <div id="explanation-box"></div>
+            <button id="btn-next" class="btn-next" onclick="nextQuestion()">Siguiente Pregunta</button>
+        </div>
+        <div id="result-screen">
+            <h2>¡Examen Finalizado!</h2>
+            <p>Has completado el Simulacro 2026 Final 3. Tu puntaje final es:</p>
+            <div class="score" id="final-score">0 / 60</div>
+            <p id="final-message"></p>
+            <button class="btn-restart" style="display:block;" onclick="location.reload()">Volver a intentar el simulacro</button>
+            <a href="index.html" class="btn-restart" style="display:block; text-decoration:none; text-align:center; box-sizing:border-box; margin-top:12px; background:var(--btn-bg); border:2px solid var(--btn-border); color:var(--text-main);">⬅️ Volver al Menú Principal</a>
+        </div>
+    </div>
+
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'es', autoDisplay: false}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        const questions = [
+            {"id":1,"text":"At the end of a unit on 'Cultural Celebrations', the teacher lets students demonstrate their learning either by recording a video report, writing a blog article, or designing an illustrated poster with oral explanations. Which UDL (DUA) principle is applied?","options":[{"id":"A","text":"Provide multiple means of engagement."},{"id":"B","text":"Provide multiple means of representation."},{"id":"C","text":"Provide multiple means of action and expression."}],"correct":"C","explanation":"Ofrecer distintas opciones para que el estudiante exprese y demuestre lo aprendido corresponde al principio de Múltiples formas de Acción y Expresión."},
+            {"id":2,"text":"A student with mild hearing loss sits at the back of the classroom and misses oral instructions. Which action aligns with the Inclusive Approach?","options":[{"id":"A","text":"Move the student's seat closer to the front, face the class clearly when speaking, and pair oral instructions with visual cues on the board."},{"id":"B","text":"Send the student to the library during listening lessons."},{"id":"C","text":"Tell the student's parents that he cannot take the English course."}],"correct":"A","explanation":"Realizar ajustes razonables en el aula (ubicación, lectura labial y apoyo visual) elimina las barreras para el aprendizaje y la participación."},
+            {"id":3,"text":"Students think that all words ending in '-ly' are adverbs (like 'quickly'). The teacher writes on the board: 'My neighbor is a very friendly person' and asks: 'What word does friendly describe here: an action or a noun?' What is the teacher promoting?","options":[{"id":"A","text":"Rote memorization."},{"id":"B","text":"Cognitive conflict."},{"id":"C","text":"Summative evaluation."}],"correct":"B","explanation":"Presentar un contraejemplo ('friendly' como adjetivo que modifica a 'person') cuestiona la sobregeneralización de los alumnos y genera conflicto cognitivo."},
+            {"id":4,"text":"After explaining how to use the Past Continuous, the teacher asks: 'In the sentence \"While I was cooking, the phone rang\", which action started first? Which action interrupted it?' What kind of questions are these?","options":[{"id":"A","text":"Instruction Checking Questions (ICQs)."},{"id":"B","text":"Concept Checking Questions (CCQs)."},{"id":"C","text":"Warm-up questions."}],"correct":"B","explanation":"Las CCQs verifican si los estudiantes comprendieron el significado y concepto temporal de la estructura gramatical."},
+            {"id":5,"text":"Students confuse the pronunciation of /b/ and /v/, and /s/ and /ʃ/ ('she' vs 'see'). Which activity directly addresses this phoneme distinction?","options":[{"id":"A","text":"Practicing minimal pairs recognition and production in context."},{"id":"B","text":"Doing a silent reading skimming task."},{"id":"C","text":"Memorizing irregular verb lists."}],"correct":"A","explanation":"Los pares mínimos (minimal pairs) son palabras que se diferencian en un solo fonema y sirven para entrenar la discriminación auditiva y pronunciación."},
+            {"id":6,"text":"During a team project, students use the expressions: 'Why don't we try...?', 'How about interviewing the principal?', 'What if we record a video instead?'. Which language function are they practicing?","options":[{"id":"A","text":"Making suggestions."},{"id":"B","text":"Expressing disappointment."},{"id":"C","text":"Apologizing."}],"correct":"A","explanation":"'Why don't we...?', 'How about...?' y 'What if...?' son estructuras clásicas para realizar sugerencias ('Making suggestions')."},
+            {"id":7,"text":"In a role-play about a delayed flight, the teacher writes on the board: 'What a let-down!', 'That's too bad!', 'I was really looking forward to it, what a shame!'. Which function is promoted?","options":[{"id":"A","text":"Expressing relief."},{"id":"B","text":"Expressing disappointment."},{"id":"C","text":"Giving directions."}],"correct":"B","explanation":"Todas estas exclamaciones expresan decepción o frustración ante una situación desafortunada ('Expressing disappointment')."},
+            {"id":8,"text":"Before listening to an interview with a Peruvian Para-athlete, the teacher writes key words from the audio on the board and practices how they sound when spoken fast. Which listening process is this?","options":[{"id":"A","text":"Bottom-up processing."},{"id":"B","text":"Top-down processing."},{"id":"C","text":"Extensive listening."}],"correct":"A","explanation":"Trabajar primero el reconocimiento acústico y la pronunciación de palabras específicas del audio corresponde al procesamiento Bottom-up."},
+            {"id":9,"text":"Students listen to a conversation between two friends. Anna says: 'Sure, I just love waking up at 5:00 AM on a freezing Sunday to clean the garage!' in an ironic tone. The teacher asks if Anna truly enjoys doing that. Which skill is tested?","options":[{"id":"A","text":"Listening for specific numbers."},{"id":"B","text":"Inferring speaker's attitude (irony/sarcasm)."},{"id":"C","text":"Summarizing."}],"correct":"B","explanation":"Detectar la ironía a través de la entonación del hablante desarrolla la capacidad de inferir la actitud y postura del emisor."},
+            {"id":10,"text":"Students are given a two-page newspaper article and asked to read only the headline, subheadings, and the first sentence of each paragraph in two minutes to identify the main idea. Which skill is this?","options":[{"id":"A","text":"Scanning."},{"id":"B","text":"Skimming."},{"id":"C","text":"Deducing meaning from context."}],"correct":"B","explanation":"Leer rápidamente títulos y primeras oraciones para captar la idea general (gist) del texto es la técnica de Skimming."},
+            {"id":11,"text":"While reading an article about nutrition, students are asked to group the foods mentioned into a three-column chart: 'Proteins', 'Carbohydrates', and 'Healthy Fats'. Which skill is practiced?","options":[{"id":"A","text":"Ordering."},{"id":"B","text":"Categorizing."},{"id":"C","text":"Predicting."}],"correct":"B","explanation":"Agrupar información en clases o categorías según criterios comunes desarrolla la habilidad de Categorizing."},
+            {"id":12,"text":"Which of the following is a communicative post-reading task that integrates speaking skills after reading a story about a boy who found a wallet on the street?","options":[{"id":"A","text":"In pairs, role-play a conversation between the boy and the owner of the wallet, or discuss what they would do in a similar moral dilemma."},{"id":"B","text":"Copy the last paragraph of the story in their notebooks."},{"id":"C","text":"Look up ten words from the story in a bilingual dictionary."}],"correct":"A","explanation":"Un role-play o discusión sobre el dilema ético del texto extiende la lectura hacia una producción oral comunicativa y significativa."},
+            {"id":13,"text":"During an oral presentation, a student speaks clearly and with good intonation, but stares at the floor the whole time with his arms crossed tightly. Which aspect should the teacher help him improve?","options":[{"id":"A","text":"Nonverbal resources (eye contact and open posture)."},{"id":"B","text":"Paraverbal resources."},{"id":"C","text":"Lexical cohesion."}],"correct":"A","explanation":"El contacto visual con la audiencia y la postura corporal abierta pertenecen a los recursos no verbales."},
+            {"id":14,"text":"In a Problem-Based Learning (ABP) unit, students are presented with the case of high food waste in the school cafeteria. What should be the students' main role?","options":[{"id":"A","text":"Memorize a list of food vocabulary and take a multiple-choice test."},{"id":"B","text":"Analyze the causes of the problem in groups, research solutions, and propose an action plan in English."},{"id":"C","text":"Listen passively while the teacher dictates the solution."}],"correct":"B","explanation":"En el Aprendizaje Basado en Problemas, los estudiantes analizan colaborativamente un problema real e investigan para proponer soluciones."},
+            {"id":15,"text":"The English teacher plans a unit where students learn about the Inca Empire's agricultural terraces using English texts and videos, coordinating with the History teacher. Which methodology is this?","options":[{"id":"A","text":"Content-Based Learning / CLIL."},{"id":"B","text":"Audio-lingual method."},{"id":"C","text":"Grammar-Translation."}],"correct":"A","explanation":"Integrar contenidos de otra área curricular (Historia) usando el inglés como vehículo de aprendizaje corresponde a Content-Based Learning (CLIL)."},
+            {"id":16,"text":"During group discussions, one student always dominates the conversation while the others stay silent. Which teacher intervention best promotes balanced interaction?","options":[{"id":"A","text":"Give each group member three 'talking chips' (tokens); each time a student speaks, they place a chip in the center and cannot speak again until everyone has used theirs."},{"id":"B","text":"Cancel all group work and make students work alone all year."},{"id":"C","text":"Only grade the student who talks the most."}],"correct":"A","explanation":"Las técnicas de participación equitativa (como 'talking chips' o asignación de turnos) regulan la interacción grupal de forma formativa."},
+            {"id":17,"text":"In a unit about environmental care, students audit how much paper and plastic their classroom throws away in a week and launch a 'Zero Waste Classroom' campaign in English. Which Transversal Approach is emphasized?","options":[{"id":"A","text":"Environmental Approach."},{"id":"B","text":"Search for Excellence Approach."},{"id":"C","text":"Intercultural Approach."}],"correct":"A","explanation":"Promover acciones concretas de reducción de residuos y sostenibilidad en la escuela desarrolla el Enfoque Ambiental."},
+            {"id":18,"text":"During a listening task, the teacher asks students to listen to a train station announcement and write down only the departure time and platform number for the train to Arequipa. Which skill is this?","options":[{"id":"A","text":"Listening for gist."},{"id":"B","text":"Listening for specific information."},{"id":"C","text":"Inferring attitude."}],"correct":"B","explanation":"Escuchar con el único propósito de extraer datos puntuales (hora y número de andén) es Listening for specific information."},
+            {"id":19,"text":"In a debate, a student says: 'Sorry to butt in, but could I just add a quick point before you move on?' Which language function is the student using?","options":[{"id":"A","text":"Interrupting another speaker politely."},{"id":"B","text":"Expressing lack of understanding."},{"id":"C","text":"Apologizing for arriving late."}],"correct":"A","explanation":"Frases como 'Sorry to butt in, but...' o 'Could I just add...' sirven para tomar la palabra o interrumpir cortésmente en un debate."},
+            {"id":20,"text":"When a student is stuck trying to write an introduction for an essay, the teacher provides three sentence starters ('Nowadays, many people believe...', 'This essay will discuss...') and gradually removes this support in future essays. What is this called?","options":[{"id":"A","text":"Scaffolding (Andamiaje)."},{"id":"B","text":"Summative grading."},{"id":"C","text":"Cognitive dissonance."}],"correct":"A","explanation":"Brindar apoyos temporales (plantillas o inicios de oración) y retirarlos progresivamente conforme el alumno gana autonomía es Scaffolding."},
+            {"id":21,"text":"A student has written the first draft of a story, revised the organization of ideas, and now is checking only for capital letters, commas, periods, and spelling mistakes. Which stage of the writing process is the student in?","options":[{"id":"A","text":"Planning."},{"id":"B","text":"Drafting."},{"id":"C","text":"Editing (Proofreading)."}],"correct":"C","explanation":"Corregir aspectos mecánicos y convenciones formales (ortografía, mayúsculas y puntuación) tras haber revisado las ideas corresponde a Editing."},
+            {"id":22,"text":"A student writes an email to the school principal requesting permission for a fair, starting with: 'Hey bro! What's up? Give us permission for the fair tomorrow!' What capacity needs to be worked on?","options":[{"id":"A","text":"Adapting the text to the communicative situation (register and audience)."},{"id":"B","text":"Handwriting legibility."},{"id":"C","text":"Bottom-up listening."}],"correct":"A","explanation":"El alumno utilizó un registro sumamente coloquial e inapropiado para una autoridad escolar; debe adecuar el registro al destinatario."},
+            {"id":23,"text":"During a speaking fluency activity (a debate), a student says: 'People in big cities has more stress.' What is the most appropriate way for the teacher to handle this mistake?","options":[{"id":"A","text":"Interrupt the student immediately and make him conjugate the verb 'have' on the board."},{"id":"B","text":"Take note of the mistake without interrupting the student's argument, and address common errors with the class at the end of the debate (delayed feedback)."},{"id":"C","text":"Stop the debate and give a grammar test."}],"correct":"B","explanation":"En actividades de fluidez libre, se evita interrumpir al estudiante; se aplica retroalimentación diferida (delayed feedback) al finalizar."},
+            {"id":24,"text":"In a conversation about weekend plans, a student says: 'I'd love to go to the party, it's very kind of you, but I think I'm going to pass on it this time.' Which language function is being used?","options":[{"id":"A","text":"Rejecting an invitation/offer politely."},{"id":"B","text":"Giving orders."},{"id":"C","text":"Asking for clarification."}],"correct":"A","explanation":"Expresiones como 'It's very kind of you, but I'm going to pass on it' se usan para declinar o rechazar una invitación con cortesía."},
+            {"id":25,"text":"A teacher wants her students to practice 'Second Conditional' prioritizing 'use' over 'usage'. Which activity is best?","options":[{"id":"A","text":"Students participate in a mock student-council election where they explain what they would improve if they were elected school president."},{"id":"B","text":"Students underline the past simple verbs in twenty conditional sentences."},{"id":"C","text":"Students copy the formula 'If + past, would + verb' five times."}],"correct":"A","explanation":"Proponer mejoras hipotéticas en una campaña escolar le da un propósito comunicativo real y significativo ('use') al segundo condicional."},
+            {"id":26,"text":"After reading an article, students write a 3-sentence text capturing only the main thesis and key points of the original 5-paragraph article in their own words. Which skill is this?","options":[{"id":"A","text":"Summarizing."},{"id":"B","text":"Scanning."},{"id":"C","text":"Predicting."}],"correct":"A","explanation":"Condensar las ideas principales de un texto extenso en una versión breve y fiel es Summarizing (resumir)."},
+            {"id":27,"text":"While reading a story, students find the sentence: 'The frugal old man never bought new clothes and saved every single coin in a jar.' The teacher asks them to figure out what 'frugal' means using the clues in the sentence. Which skill is this?","options":[{"id":"A","text":"Deducing meaning from context."},{"id":"B","text":"Skimming."},{"id":"C","text":"Ordering."}],"correct":"A","explanation":"Inferir el significado de una palabra desconocida apoyándose en las pistas semánticas de la oración es Deducing meaning from context."},
+            {"id":28,"text":"Students exchange their essay drafts in pairs and use a checklist provided by the teacher to give each other constructive suggestions before writing the final version. What type of assessment is this?","options":[{"id":"A","text":"Peer-assessment (Coevaluación)."},{"id":"B","text":"Self-assessment."},{"id":"C","text":"Diagnostic assessment."}],"correct":"A","explanation":"Cuando los estudiantes evalúan recíprocamente el trabajo de un compañero usando criterios claros, realizan Peer-assessment."},
+            {"id":29,"text":"In a listening lesson, the teacher plays an audio and asks students to raise their hands whenever they hear discourse markers that show contrast ('however', 'on the other hand', 'whereas'). Which skill is developed?","options":[{"id":"A","text":"Detecting connectors / discourse markers."},{"id":"B","text":"Listening for gist."},{"id":"C","text":"Extensive listening."}],"correct":"A","explanation":"Identificar auditivamente las palabras de enlace que estructuran el discurso desarrolla la capacidad de Detecting connectors."},
+            {"id":30,"text":"A teacher wants to promote 'Extensive Reading' among her fourth-grade students. Which activity is most appropriate?","options":[{"id":"A","text":"Letting students choose graded readers or comics of their preference from a class library to read at home for enjoyment, sharing brief informal impressions once a month."},{"id":"B","text":"Analyzing the grammatical function of every word in a 10-line paragraph."},{"id":"C","text":"Translating a technical manual in class with a dictionary."}],"correct":"A","explanation":"La lectura extensiva se caracteriza por la libre elección de textos accesibles para leer por placer y desarrollar el hábito lector."},
+            {"id":31,"text":"During a conversation, a student says: 'Last night I see a shooting star.' The teacher replies naturally: 'Oh, you saw a shooting star! Did you make a wish?' Which feedback technique did the teacher use?","options":[{"id":"A","text":"Recast."},{"id":"B","text":"Metalinguistic explanation."},{"id":"C","text":"Clarification request."}],"correct":"A","explanation":"En el Recast, el docente reformula correctamente el enunciado del estudiante de forma natural sin cortar el flujo comunicativo."},
+            {"id":32,"text":"To help students understand why 'I have visited Cusco in 2022' is incorrect, the teacher draws a timeline on the board contrasting finished past time ('in 2022') with unfinished time. Why is this strategy effective?","options":[{"id":"A","text":"It provides a visual representation that helps students conceptualize the difference between Simple Past and Present Perfect."},{"id":"B","text":"It punishes students who make mistakes."},{"id":"C","text":"It practices minimal pairs."}],"correct":"A","explanation":"La línea de tiempo es un recurso visual inductivo que permite comprender conceptualmente la diferencia aspectual entre ambos tiempos."},
+            {"id":33,"text":"During an oral presentation on climate change, a student says: 'I'd like to draw your attention to this chart here, which shows a critical rise in temperature.' Which function is the student using?","options":[{"id":"A","text":"Highlighting / emphasizing important information."},{"id":"B","text":"Expressing regret."},{"id":"C","text":"Apologizing."}],"correct":"A","explanation":"Frases como 'I'd like to draw your attention to...' sirven para resaltar o enfatizar datos clave durante una exposición."},
+            {"id":34,"text":"A teacher notices that her students write very short, disconnected sentences: 'Maria is my friend. Maria lives in Huarmey. Maria likes ceviche.' She asks them to combine the sentences using relative pronouns ('who') and pronouns ('she'). What is she improving?","options":[{"id":"A","text":"Written cohesion (reference and subordination)."},{"id":"B","text":"Oral paraverbal volume."},{"id":"C","text":"Scanning speed."}],"correct":"A","explanation":"El uso de pronombres personales y relativos para evitar repeticiones innecesarias mejora directamente la cohesión gramatical y referencial."},
+            {"id":35,"text":"In a lesson about recipes, the teacher brings a recipe for 'Pachamanca' and asks students: 'Have you ever eaten Pachamanca? How does your family prepare it on special occasions?' What is the teacher promoting?","options":[{"id":"A","text":"Meaningful learning by connecting the topic to students' prior knowledge and local culture."},{"id":"B","text":"Bottom-up phonetic decoding."},{"id":"C","text":"Summative testing."}],"correct":"A","explanation":"Vincular el contenido de la sesión con la cultura local y las vivencias familiares de los alumnos genera aprendizaje significativo."},
+            {"id":36,"text":"Which of the following tasks has the HIGHEST cognitive demand according to Bloom's Taxonomy and MINEDU standards?","options":[{"id":"A","text":"Copying ten vocabulary words from the board."},{"id":"B","text":"Matching five pictures of animals with their names."},{"id":"C","text":"Evaluating two opposing proposals to solve water scarcity in their town and writing a justified recommendation."}],"correct":"C","explanation":"Evaluar propuestas contrapuestas, tomar postura y justificar una solución exige procesos cognitivos de orden superior (alta demanda cognitiva)."},
+            {"id":37,"text":"At the end of a speaking lesson, the teacher asks: 'What did we learn today? Which speaking strategy helped you the most when you forgot a word? How can you use this outside school?' What is the teacher promoting?","options":[{"id":"A","text":"Metacognition."},{"id":"B","text":"Product writing."},{"id":"C","text":"Rote drilling."}],"correct":"A","explanation":"Las preguntas sobre qué se aprendió, cómo se superaron las dificultades y cómo transferir lo aprendido desarrollan la metacognición."},
+            {"id":38,"text":"In a flipped classroom (Blended Learning) model, what do students typically do during face-to-face class time at school?","options":[{"id":"A","text":"Watch long grammar videos in silence for the first time."},{"id":"B","text":"Engage in interactive, collaborative, and communicative tasks applying the concepts they reviewed previously."},{"id":"C","text":"Copy theory from the textbook in silence."}],"correct":"B","explanation":"En el aula invertida (Flipped/Blended Learning), el tiempo presencial se aprovecha al máximo para la interacción, práctica comunicativa y trabajo colaborativo."},
+            {"id":39,"text":"Students are practicing how to politely disagree in a discussion. Which set of expressions is most appropriate?","options":[{"id":"A","text":"'I see what you mean, however, from my perspective...', 'I'm not sure I completely agree with that because...'"},{"id":"B","text":"'You are totally wrong! Shut up!'"},{"id":"C","text":"'Could you spell your last name, please?'"}],"correct":"A","explanation":"Estas expresiones muestran cortesía al validar primero al interlocutor antes de presentar un contraargumento ('Disagreeing politely')."},
+            {"id":40,"text":"A teacher wants her first-grade students to practice 'Imperatives' in a meaningful way. Which activity is best?","options":[{"id":"A","text":"Students create an illustrated poster with step-by-step instructions on what to do during an earthquake ('Drop, cover, and hold on', 'Stay away from windows')."},{"id":"B","text":"Students memorize the definition of an imperative verb."},{"id":"C","text":"Students conjugate the verb 'to be' in the past."}],"correct":"A","explanation":"Elaborar una guía de seguridad sísmica utiliza los imperativos en su función comunicativa auténtica: dar instrucciones y recomendaciones."},
+            {"id":41,"text":"During a listening activity, students listen to a story and then work in pairs to deduce whether the two characters are strangers or old friends based on the way they greet each other. Which skill is practiced?","options":[{"id":"A","text":"Inferring implicit information from context."},{"id":"B","text":"Scanning a written text."},{"id":"C","text":"Copying explicit dates."}],"correct":"A","explanation":"Deducir la relación entre los personajes a partir de pistas indirectas del diálogo es inferir información implícita."},
+            {"id":42,"text":"When a student says 'My father is a... a... (makes a gesture of driving a car)', the teacher says: 'A taxi...?' and waits for the student to say 'driver!'. Which technique is the teacher using?","options":[{"id":"A","text":"Elicitation."},{"id":"B","text":"Explicit punishment."},{"id":"C","text":"Summative grading."}],"correct":"A","explanation":"Dar un pequeño pie o pista ('A taxi...?') para que el propio estudiante recupere y produzca la palabra buscada es Elicitation."},
+            {"id":43,"text":"To help students wrap up a lesson on cyberbullying, which closing activity is most student-centered and effective?","options":[{"id":"A","text":"Have students share in pairs the two most important takeaways from the lesson and one concrete action they will apply online."},{"id":"B","text":"The teacher reads the lesson plan objectives aloud while students pack their bags."},{"id":"C","text":"Assign 50 grammar sentences without explanation."}],"correct":"A","explanation":"Un cierre (wrap-up) efectivo está centrado en el estudiante, permitiéndole sintetizar lo aprendido y asumir un compromiso práctico."},
+            {"id":44,"text":"In a third-grade class, students are going to write a biography of their favorite artist. First, they brainstorm facts, then organize an outline, write a first draft, do peer-review, and finally edit their text. Which approach is this?","options":[{"id":"A","text":"Process writing approach."},{"id":"B","text":"Product writing approach."},{"id":"C","text":"Audio-lingual approach."}],"correct":"A","explanation":"Seguir las etapas recursivas de planificación, textualización (borrador), revisión y edición corresponde al enfoque de escritura como proceso (Process writing)."},
+            {"id":45,"text":"During a conversation, a student says: 'As a rule, teenagers prefer texting to calling. On the whole, messaging apps are faster.' Which language function is the student using?","options":[{"id":"A","text":"Making generalizations."},{"id":"B","text":"Offering apologies."},{"id":"C","text":"Asking for directions."}],"correct":"A","explanation":"Expresiones como 'As a rule...' y 'On the whole...' se emplean para formular generalizaciones ('Making generalizations')."},
+            {"id":46,"text":"CLOZE TEST (46-60): The Science of Sleep and Memory.\nFor decades, scientists have studied why human beings spend nearly a third of their lives sleeping. Research shows that sleep plays a vital (46) ______ in consolidating memories and repairing the body.","options":[{"id":"A","text":"role"},{"id":"B","text":"duty"},{"id":"C","text":"task"}],"correct":"A","explanation":"La colocación fija en inglés es 'play a vital role in' (desempeñar un papel vital en)."},
+            {"id":47,"text":"CLOZE: When we learn something new during the day, the information is initially stored in a temporary area of the brain. However, it is during deep sleep that these memories are (47) ______ to long-term storage.","options":[{"id":"A","text":"transferred"},{"id":"B","text":"transmitted"},{"id":"C","text":"transported"}],"correct":"A","explanation":"En neurociencia y lenguaje académico, los recuerdos se transfieren ('are transferred to') a la memoria de largo plazo."},
+            {"id":48,"text":"CLOZE: Consequently, students who pull an all-nighter before an exam often (48) ______ forgetting a large part of what they studied.","options":[{"id":"A","text":"end up"},{"id":"B","text":"turn out"},{"id":"C","text":"make up"}],"correct":"A","explanation":"El phrasal verb 'end up + -ing' significa 'terminar haciendo algo como consecuencia' ('end up forgetting' = terminan olvidando)."},
+            {"id":49,"text":"CLOZE: Sleep deprivation not only affects memory, (49) ______ it also weakens the immune system and increases irritability.","options":[{"id":"A","text":"so"},{"id":"B","text":"but"},{"id":"C","text":"although"}],"correct":"B","explanation":"La estructura correlativa completa es 'not only... but (also)...' (no solo afecta la memoria, sino que también debilita...)."},
+            {"id":50,"text":"CLOZE: In fact, people who sleep less than six hours a night are much more likely to suffer (50) ______ concentration problems.","options":[{"id":"A","text":"of"},{"id":"B","text":"from"},{"id":"C","text":"by"}],"correct":"B","explanation":"El verbo 'suffer' rige obligatoriamente la preposición 'from' ('suffer FROM problems')."},
+            {"id":51,"text":"CLOZE: One of the main culprits behind modern sleep problems is the blue light emitted by electronic screens. This light tricks the brain into thinking it is still daytime, (51) ______ delays the release of melatonin.","options":[{"id":"A","text":"which"},{"id":"B","text":"that"},{"id":"C","text":"what"}],"correct":"A","explanation":"En una oración relativa explicativa después de una coma, que hace referencia a toda la idea anterior, se utiliza obligatoriamente 'which'."},
+            {"id":52,"text":"CLOZE: Sleep specialists recommend turning (52) ______ all digital devices at least one hour before going to bed.","options":[{"id":"A","text":"off"},{"id":"B","text":"out"},{"id":"C","text":"up"}],"correct":"A","explanation":"El phrasal verb para apagar dispositivos electrónicos es 'turn off' ('turning off all digital devices')."},
+            {"id":53,"text":"CLOZE: (53) ______ many teenagers know that using phones late at night is harmful, breaking the habit can be extremely challenging.","options":[{"id":"A","text":"Despite"},{"id":"B","text":"Even though"},{"id":"C","text":"Because of"}],"correct":"B","explanation":"'Even though' (A pesar de que / Aunque) va seguido de una cláusula completa con sujeto y verbo ('many teenagers know...')."},
+            {"id":54,"text":"CLOZE: Another helpful strategy is to keep a consistent schedule, going to bed and waking up at the same time every day, (54) ______ on weekends.","options":[{"id":"A","text":"even"},{"id":"B","text":"still"},{"id":"C","text":"yet"}],"correct":"A","explanation":"'Even on weekends' significa 'incluso los fines de semana', enfatizando la constancia del hábito."},
+            {"id":55,"text":"CLOZE: In a study conducted last year, high schools that delayed their morning start time by forty minutes found that students (55) ______ higher grades and fewer absences.","options":[{"id":"A","text":"achieve"},{"id":"B","text":"achieved"},{"id":"C","text":"have achieved"}],"correct":"B","explanation":"Como el estudio se realizó el año pasado ('conducted last year', 'found'), el verbo subordinado debe ir en pasado ('achieved')."},
+            {"id":56,"text":"CLOZE: Furthermore, avoiding caffeine in the late afternoon (56) ______ make a big difference in how quickly you fall asleep.","options":[{"id":"A","text":"can"},{"id":"B","text":"ought"},{"id":"C","text":"capable"}],"correct":"A","explanation":"El modal 'can' seguido del verbo base 'make' expresa posibilidad real ('can make a big difference')."},
+            {"id":57,"text":"CLOZE: If we prioritized sleep as much as we prioritize diet and exercise, our overall productivity (57) ______ improve dramatically.","options":[{"id":"A","text":"will"},{"id":"B","text":"would"},{"id":"C","text":"shall"}],"correct":"B","explanation":"Es un Segundo Condicional ('If we prioritized [Past Simple]..., our productivity WOULD improve')."},
+            {"id":58,"text":"CLOZE: Unfortunately, modern society often praises overworking at the (58) ______ of rest and personal health.","options":[{"id":"A","text":"expense"},{"id":"B","text":"price"},{"id":"C","text":"charge"}],"correct":"A","explanation":"La expresión idiomática fija es 'at the expense of' (a expensas de / a costa de)."},
+            {"id":59,"text":"CLOZE: Creating a cool, dark, and quiet bedroom environment is (59) ______ for achieving deep, restorative sleep.","options":[{"id":"A","text":"essential"},{"id":"B","text":"reluctant"},{"id":"C","text":"trivial"}],"correct":"A","explanation":"'Essential' (esencial / fundamental) guarda total coherencia con lograr un sueño profundo y reparador."},
+            {"id":60,"text":"CLOZE: Ultimately, getting enough rest is not a luxury, but a biological necessity that nobody should (60) ______ for granted.","options":[{"id":"A","text":"make"},{"id":"B","text":"take"},{"id":"C","text":"give"}],"correct":"B","explanation":"La colocación idiomática fija es 'take for granted' (dar por sentado)."}
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isLight = false;
+
+        const quizContainer = document.getElementById('quiz-container');
+        const quizArea = document.getElementById('quiz-area');
+        const progressText = document.getElementById('progress-text');
+        const feedbackArea = document.getElementById('feedback');
+        const explanationBox = document.getElementById('explanation-box');
+        const btnNext = document.getElementById('btn-next');
+        const resultScreen = document.getElementById('result-screen');
+
+        function toggleTheme() {
+            isLight = !isLight;
+            document.body.classList.toggle('light-theme', isLight);
+            document.getElementById('theme-btn').innerText = isLight ? "🌙 Cambiar a Modo Oscuro" : "☀️ Cambiar a Modo Claro";
+        }
+
+        function toggleLanguage() {
+            var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+            if (!iframe) {
+                window.location.hash = "googtrans(en|es)";
+                location.reload();
+            }
+        }
+
+        function renderQuestion() {
+            quizArea.innerHTML = '';
+            feedbackArea.style.display = 'none';
+            explanationBox.style.display = 'none';
+            btnNext.style.display = 'none';
+
+            progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
+            const q = questions[currentQuestionIndex];
+
+            const qDiv = document.createElement('div');
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerHTML = `<strong>Pregunta ${q.id}:</strong><br><br>` + q.text.replace(/\n/g, '<br>');
+            qDiv.appendChild(qText);
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerHTML = `<strong>${String.fromCharCode(65 + index)})</strong> ${opt.text}`;
+                btn.onclick = () => selectAnswer(btn, opt.id, q.correct, q.explanation);
+                btn.dataset.id = opt.id;
+                qDiv.appendChild(btn);
+            });
+
+            quizArea.appendChild(qDiv);
+        }
+
+        function selectAnswer(selectedBtn, selectedId, correctId, explanation) {
+            const buttons = document.querySelectorAll('.option');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedId === correctId) {
+                selectedBtn.classList.add('correct');
+                feedbackArea.textContent = '¡Correcto! ✔️';
+                feedbackArea.className = 'feedback-correct';
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+                const correctBtn = document.querySelector(`.option[data-id="${correctId}"]`);
+                if (correctBtn) correctBtn.classList.add('correct');
+                feedbackArea.textContent = `❌ Incorrecto. La alternativa correcta era la ${correctId}.`;
+                feedbackArea.className = 'feedback-incorrect';
+            }
+
+            explanationBox.innerHTML = `<strong>💡 Explicación pedagógica:</strong><br>${explanation}`;
+            explanationBox.style.display = 'block';
+            feedbackArea.style.display = 'block';
+            btnNext.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+                window.scrollTo(0, 0);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultScreen.style.display = 'block';
+            document.getElementById('final-score').textContent = `${score} / ${questions.length}`;
+            const pct = score / questions.length;
+            document.getElementById('final-message').textContent = pct >= 0.8
+                ? '¡Extraordinario! Dominas los criterios del Temario 2026 del MINEDU.'
+                : pct >= 0.6
+                ? '¡Muy buen puntaje! Repasa las explicaciones de las preguntas con error para asegurar tu ascenso.'
+                : 'Sigue practicando paso a paso con la retroalimentación pedagógica.';
+        }
+
+        if (window.location.hash.includes("googtrans(en|es)")) {
+            document.getElementById('lang-btn').innerText = "🔄 Restaurar a Inglés original";
+            document.getElementById('lang-btn').onclick = function() {
+                window.location.hash = "";
+                location.reload();
+            };
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>

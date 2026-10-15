@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulacro 2026 Final 2 - 60 Preguntas</title>
+    <style>
+        :root {
+            --bg-body: #121212; --bg-container: #1e1e1e; --text-main: #e0e0e0; --text-muted: #b0bec5;
+            --btn-bg: #2c2c2c; --btn-border: #424242; --btn-hover: #3d3d3d;
+            --primary: #00838f; --primary-hover: #006064;
+            --correct-bg: #1b5e20; --correct-border: #2e7d32; --correct-text: #c8e6c9;
+            --incorrect-bg: #b71c1c; --incorrect-border: #c62828; --incorrect-text: #ffcdd2;
+            --explanation-bg: #263238; --explanation-border: #37474f; --explanation-text: #e0f7fa;
+        }
+        body.light-theme {
+            --bg-body: #f4f7f6; --bg-container: #ffffff; --text-main: #333333; --text-muted: #666666;
+            --btn-bg: #f8f9fa; --btn-border: #dee2e6; --btn-hover: #e9ecef;
+            --primary: #1a73e8; --primary-hover: #1557b0;
+            --correct-bg: #d4edda; --correct-border: #c3e6cb; --correct-text: #155724;
+            --incorrect-bg: #f8d7da; --incorrect-border: #f5c6cb; --incorrect-text: #721c24;
+            --explanation-bg: #e3f2fd; --explanation-border: #bbdefb; --explanation-text: #0d47a1;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; padding: 20px; display: flex; justify-content: center; transition: all 0.3s ease; }
+        .container { background: var(--bg-container); max-width: 800px; width: 100%; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .top-controls { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .theme-btn, .lang-btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .theme-btn:hover, .lang-btn:hover { background: var(--primary-hover); }
+        h1 { text-align: center; font-size: 26px; margin-bottom: 5px; }
+        h2 { text-align: center; color: var(--text-muted); font-size: 16px; margin-top: 0; margin-bottom: 20px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid var(--btn-border); padding-bottom: 10px; }
+        .progress { font-size: 14px; color: var(--text-muted); font-weight: bold; }
+        .exam-info { color: var(--primary); font-size: 14px; font-weight: bold; }
+        .question-text { font-size: 18px; line-height: 1.6; margin-bottom: 20px; font-weight: 500; text-align: justify; }
+        .option { display: block; width: 100%; text-align: left; background: var(--btn-bg); border: 2px solid var(--btn-border); padding: 15px; margin-bottom: 12px; border-radius: 8px; cursor: pointer; font-size: 16px; line-height: 1.4; color: var(--text-main); }
+        .option:hover { background: var(--btn-hover); }
+        .option.correct { background: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); pointer-events: none; }
+        .option.incorrect { background: var(--incorrect-bg); border-color: var(--incorrect-border); color: var(--incorrect-text); pointer-events: none; }
+        .option:disabled { cursor: default; opacity: 0.85; }
+        #feedback { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; font-weight: bold; text-align: center; font-size: 18px; }
+        .feedback-correct { background: var(--correct-bg); color: var(--correct-text); border: 1px solid var(--correct-border); }
+        .feedback-incorrect { background: var(--incorrect-bg); color: var(--incorrect-text); border: 1px solid var(--incorrect-border); }
+        #explanation-box { margin-top: 15px; padding: 20px; border-radius: 8px; display: none; background: var(--explanation-bg); border: 1px solid var(--explanation-border); color: var(--explanation-text); font-size: 15px; line-height: 1.6; text-align: justify; }
+        .btn-next, .btn-restart { display: none; width: 100%; padding: 18px; margin-top: 25px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-next:hover, .btn-restart:hover { background: var(--primary-hover); }
+        #result-screen { display: none; text-align: center; }
+        .score { font-size: 54px; font-weight: bold; color: var(--primary); margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-controls">
+            <a href="index.html" class="theme-btn" style="text-decoration:none; display:inline-flex; align-items:center;">🏠 Menú Principal</a>
+            <div style="display:flex; gap:10px;">
+                <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️ Cambiar a Modo Claro</button>
+                <button class="lang-btn" onclick="toggleLanguage()" id="lang-btn">🇬🇧 Leer en Español / English</button>
+            </div>
+        </div>
+        <h1>Simulacro 2026 Final 2</h1>
+        <h2>Ascenso EBR Secundaria - Inglés como Lengua Extranjera</h2>
+        <div id="quiz-container">
+            <div class="header-bar">
+                <div class="exam-info">60 Preguntas (45 Casos + 15 Cloze Test)</div>
+                <div id="progress-text" class="progress"></div>
+            </div>
+            <div id="quiz-area"></div>
+            <div id="feedback"></div>
+            <div id="explanation-box"></div>
+            <button id="btn-next" class="btn-next" onclick="nextQuestion()">Siguiente Pregunta</button>
+        </div>
+        <div id="result-screen">
+            <h2>¡Examen Finalizado!</h2>
+            <p>Has completado el Simulacro 2026 Final 2. Tu puntaje final es:</p>
+            <div class="score" id="final-score">0 / 60</div>
+            <p id="final-message"></p>
+            <button class="btn-restart" style="display:block;" onclick="location.reload()">Volver a intentar el simulacro</button>
+            <a href="index.html" class="btn-restart" style="display:block; text-decoration:none; text-align:center; box-sizing:border-box; margin-top:12px; background:var(--btn-bg); border:2px solid var(--btn-border); color:var(--text-main);">⬅️ Volver al Menú Principal</a>
+        </div>
+    </div>
+
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'es', autoDisplay: false}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        const questions = [
+            {"id":1,"text":"During a planning meeting on Universal Design for Learning (UDL), an English teacher says: 'To keep my students motivated, I let them choose between three different topics for their reading project and set personal goals.' Which UDL principle is reflected here?","options":[{"id":"A","text":"Provide multiple means of engagement."},{"id":"B","text":"Provide multiple means of representation."},{"id":"C","text":"Provide multiple means of action and expression."}],"correct":"A","explanation":"El principio de Compromiso o Implicación (Engagement) promueve la motivación, la autonomía en la elección de temas y la autorregulación."},
+            {"id":2,"text":"A student with low vision joins the second-grade class. During a group flashcard activity, which action best aligns with the Inclusive Approach?","options":[{"id":"A","text":"Exempt the student from the group activity and give him an audio task."},{"id":"B","text":"Ask a classmate to answer on the student's behalf during the game."},{"id":"C","text":"Provide high-contrast, large-print flashcards with tactile borders for the groups so the student participates autonomously."}],"correct":"C","explanation":"El Enfoque Inclusivo busca eliminar barreras adaptando el material para que todos participen con autonomía y equidad."},
+            {"id":3,"text":"While practicing modal verbs, a student says: 'Mustn't and don't have to mean the same because both are negative!' Which strategy best creates cognitive conflict?","options":[{"id":"A","text":"Write the grammar rule on the board and ask the student to copy it."},{"id":"B","text":"Show two signs: 'You mustn't smoke in the hospital' and 'You don't have to go to school on Sunday', and ask if it is illegal to go to school on Sunday or optional to smoke in a hospital."},{"id":"C","text":"Give the student a fill-in-the-blank worksheet with ten sentences."}],"correct":"B","explanation":"Confrontar la creencia del alumno con un ejemplo real que contradice su hipótesis genera conflicto cognitivo (disonancia) para que descubra la diferencia de uso."},
+            {"id":4,"text":"Before a pair-work speaking task, the teacher says: 'Interview your partner using four questions in five minutes. Do not write the answers.' Which set of Instruction Checking Questions (ICQs) is appropriate?","options":[{"id":"A","text":"Are you working alone or in pairs? How many questions will you ask? Do you have to write or just speak?"},{"id":"B","text":"Did everyone understand my instructions? Do you have any doubts?"},{"id":"C","text":"What auxiliary verb do we use for past tense questions?"}],"correct":"A","explanation":"Las ICQs verifican con preguntas cerradas y concretas si los alumnos comprendieron la dinámica operativa antes de iniciar la tarea."},
+            {"id":5,"text":"Carlos notices his students pronounce every word separately ('What - do - you - want - to - eat?'), sounding robotic. Which pronunciation feature should he teach?","options":[{"id":"A","text":"Minimal pairs."},{"id":"B","text":"Linking sounds and connected speech."},{"id":"C","text":"Contrastive stress."}],"correct":"B","explanation":"El enlace de sonidos (linking) y el habla conectada permiten unir palabras de forma fluida y natural en inglés."},
+            {"id":6,"text":"During a discussion, Lucia wants her students to use: 'What I'm trying to say is...', 'Let me put it another way...', 'In other words...'. Which language function is she promoting?","options":[{"id":"A","text":"Interrupting politely."},{"id":"B","text":"Acknowledging others' ideas."},{"id":"C","text":"Clarifying or restating one's own ideas."}],"correct":"C","explanation":"Estas expresiones sirven para reformular o aclarar la propia idea cuando el interlocutor no la comprendió bien."},
+            {"id":7,"text":"In a debate about future technology, the teacher writes: 'It's bound to happen...', 'There's a slim chance that...', 'I highly doubt that...'. Which function is involved?","options":[{"id":"A","text":"Expressing degrees of certainty."},{"id":"B","text":"Making generalizations."},{"id":"C","text":"Expressing regrets."}],"correct":"A","explanation":"Expresiones como 'bound to' (seguro), 'slim chance' (poca probabilidad) y 'doubt' gradúan el nivel de certeza del hablante."},
+            {"id":8,"text":"Before playing a weather forecast audio, the teacher shows a map of Peru and asks students to predict the weather in Puno and Loreto based on their geographical knowledge. Which process is prioritized?","options":[{"id":"A","text":"Bottom-up processing."},{"id":"B","text":"Top-down processing."},{"id":"C","text":"Intensive listening."}],"correct":"B","explanation":"El procesamiento Top-down utiliza los saberes previos y pistas contextuales para formular hipótesis antes de escuchar el detalle."},
+            {"id":9,"text":"Students listen to an audio where a boy says in a shaky, sad voice: 'Everyone had their own friends, so I sat alone at lunch.' The teacher asks: 'How did the boy feel?' Which skill is promoted?","options":[{"id":"A","text":"Listening for gist."},{"id":"B","text":"Detecting connectors."},{"id":"C","text":"Inferring attitude and feelings."}],"correct":"C","explanation":"El sentimiento no se dice literalmente; el estudiante debe inferirlo a partir del tono de voz y el contexto."},
+            {"id":10,"text":"After reading a health poster titled 'STOP DENGUE NOW!', the teacher asks: 'Why did the author use capital letters, bold red fonts, and an exclamation mark?' Which capacity is promoted?","options":[{"id":"A","text":"Reflecting on and evaluating the form of the written text."},{"id":"B","text":"Scanning for specific details."},{"id":"C","text":"Retrieving explicit information."}],"correct":"A","explanation":"Analizar el propósito de los recursos tipográficos, el diseño y los signos de puntuación corresponde a reflexionar sobre la FORMA del texto."},
+            {"id":11,"text":"After reading a biography, students receive six mixed-up life events on paper strips and number them chronologically from 1 to 6. Which reading skill is practiced?","options":[{"id":"A","text":"Categorizing."},{"id":"B","text":"Ordering."},{"id":"C","text":"Skimming."}],"correct":"B","explanation":"Organizar eventos según su secuencia temporal o cronológica desarrolla la subhabilidad de Ordering."},
+            {"id":12,"text":"Which speaking activity is the most communicative (contains an information gap) for practicing directions and prepositions of place?","options":[{"id":"A","text":"Memorizing a textbook dialogue about directions and acting it out."},{"id":"B","text":"Looking at the same map on the board and saying five sentences aloud."},{"id":"C","text":"Working in pairs with two versions of a town map (each missing different buildings) and asking directions to complete the maps."}],"correct":"C","explanation":"El vacío de información (information gap) obliga a ambos estudiantes a comunicarse de forma real para obtener datos que no tienen."},
+            {"id":13,"text":"Before telling a mystery story aloud, the teacher advises: 'Lower your voice in spooky parts, speak faster during the chase, and make dramatic pauses.' Which source is emphasized?","options":[{"id":"A","text":"Paraverbal sources."},{"id":"B","text":"Nonverbal sources."},{"id":"C","text":"Written conventions."}],"correct":"A","explanation":"El volumen, el ritmo (velocidad), la entonación y las pausas vocales son recursos paraverbales."},
+            {"id":14,"text":"In a Task-Based Learning (TBL) lesson, students have just presented their group emergency plans. Next, the teacher writes common grammar errors heard during the task on the board to analyze them. Which TBL stage is this?","options":[{"id":"A","text":"Pre-task."},{"id":"B","text":"While-task."},{"id":"C","text":"Post-task (Language focus)."}],"correct":"C","explanation":"En TBL, el enfoque explícito en la forma gramatical y corrección de errores se realiza al final, en la etapa Post-task."},
+            {"id":15,"text":"Which classroom sequence best exemplifies Inquiry-Based Learning (Aprendizaje Basado en la Indagación)?","options":[{"id":"A","text":"The teacher explains pollution rules and gives a multiple-choice quiz."},{"id":"B","text":"Students formulate research questions about local river pollution, investigate causes in English articles, analyze data, and present conclusions."},{"id":"C","text":"Students repeat a dialogue about recycling after the teacher."}],"correct":"B","explanation":"El aprendizaje por indagación parte de formular preguntas de investigación, buscar evidencia, analizarla y comunicar conclusiones."},
+            {"id":16,"text":"To guarantee equitable participation in a four-member group reading task, which Cooperative Learning strategy is best?","options":[{"id":"A","text":"Assign interdependent roles (facilitator, timekeeper, reporter, checker) and give each member a vital part of the information."},{"id":"B","text":"Let the student with the highest grade write all the answers for the group."},{"id":"C","text":"Grade only the first group that finishes the worksheet."}],"correct":"A","explanation":"La interdependencia positiva y la asignación de roles garantizan que todos aporten y nadie quede excluido."},
+            {"id":17,"text":"Students in Ancash are making an English brochure about local traditions for an Australian school. Which guideline aligns with the Intercultural Approach?","options":[{"id":"A","text":"Avoid mentioning Andean dishes so foreign students don't find them strange."},{"id":"B","text":"Write only about American holidays because it is an English class."},{"id":"C","text":"Explain the value of their local traditions in English and prepare questions to learn about Australian traditions in mutual respect."}],"correct":"C","explanation":"El enfoque intercultural promueve valorar la propia identidad cultural y dialogar horizontalmente con otras culturas."},
+            {"id":18,"text":"After listening to an audio where three teens talk about exam stress, the teacher wants a communicative post-listening speaking task. Which is best?","options":[{"id":"A","text":"Listen again and fill in the blanks in the transcript."},{"id":"B","text":"In groups, discuss which teen had the best advice and share how they personally cope with stress."},{"id":"C","text":"Write an individual 100-word summary in their notebooks."}],"correct":"B","explanation":"Discutir en grupos evaluando las ideas del audio y conectándolas con su experiencia desarrolla el speaking en la fase post-listening."},
+            {"id":19,"text":"To help students extend their pair conversations and keep a discussion going, which expressions should the teacher provide?","options":[{"id":"A","text":"'Why do you think so?', 'Tell me more about that!', 'What's your take on this?'"},{"id":"B","text":"'To sum up...', 'In conclusion...', 'All in all...'"},{"id":"C","text":"'What a relief!', 'Thank goodness!'"}],"correct":"A","explanation":"Estas preguntas invitan al compañero a profundizar sus ideas y mantienen viva la interacción oral."},
+            {"id":20,"text":"Which strategy best fosters autonomous learning and metacognition in English?","options":[{"id":"A","text":"Giving daily pop quizzes and posting a public ranking of grades."},{"id":"B","text":"Translating all texts into Spanish so students don't struggle."},{"id":"C","text":"Having students keep a portfolio where they set learning goals, evaluate which study strategies worked best, and plan improvements."}],"correct":"C","explanation":"El portafolio reflexivo promueve la autorregulación, la planificación de metas y la reflexión metacognitiva."},
+            {"id":21,"text":"A student writes: 'Exercise is good for health. However, my brother bought a blue motorcycle. Consequently, pasta is boiled in water.' What is the main flaw in this text?","options":[{"id":"A","text":"It lacks cohesion because it has no linking words."},{"id":"B","text":"It lacks coherence because the ideas have no logical connection or unified topic."},{"id":"C","text":"It lacks punctuation conventions."}],"correct":"B","explanation":"Aunque usa conectores formales (However, Consequently), las ideas saltan de un tema a otro sin sentido lógico, fallando en la coherencia."},
+            {"id":22,"text":"Before writing a job application email, students analyze three real application emails to identify the target audience, purpose, formality, and typical sections. Which writing approach is this?","options":[{"id":"A","text":"Free-writing approach."},{"id":"B","text":"Grammar-translation approach."},{"id":"C","text":"Genre approach."}],"correct":"C","explanation":"El enfoque de género (Genre approach) analiza modelos reales de un género textual según su propósito social, audiencia y estructura."},
+            {"id":23,"text":"A student writes: 'The movie was good. The actors were good and the music was good.' The teacher comments: 'Try replacing \"good\" with varied adjectives like \"gripping\", \"outstanding\", or \"memorable\".' What is the feedback focus?","options":[{"id":"A","text":"Lexical range (variety of vocabulary)."},{"id":"B","text":"Grammatical accuracy."},{"id":"C","text":"Text organization."}],"correct":"A","explanation":"Sugerir el uso de un repertorio más variado y preciso de vocabulario para evitar repeticiones apunta al Rango (Range)."},
+            {"id":24,"text":"A student writes: 'Last summer, my family go to Cusco and eat cheese.' Which teacher response provides reflective feedback?","options":[{"id":"A","text":"Cross out 'go' and 'eat' and write 'went' and 'ate' in red pen."},{"id":"B","text":"Underline 'Last summer', 'go', and 'eat', and ask: 'Does this refer to the present or the past? How do we change verbs to show past actions?'"},{"id":"C","text":"Write 'Incorrect tense: -2 points' at the top of the page."}],"correct":"B","explanation":"La retroalimentación reflexiva formula preguntas guía para que el propio estudiante descubra la discordancia temporal y se autocorrija."},
+            {"id":25,"text":"During a semi-controlled speaking practice, a student says: 'She work in a bank.' The teacher says: 'Excuse me, she... what? Could you repeat that?' Which correction technique is this?","options":[{"id":"A","text":"Recast."},{"id":"B","text":"Explicit correction."},{"id":"C","text":"Clarification request / Elicitation."}],"correct":"C","explanation":"Pedir una aclaración o repetición ('Could you repeat that?') invita al alumno a notar el error y reformular su oración por sí mismo."},
+            {"id":26,"text":"To prioritize grammar 'use' (communicative meaning) over 'usage' (rules) when teaching Present Continuous for future plans, which activity is best?","options":[{"id":"A","text":"Students compare their weekly schedules in pairs to find a common free afternoon to meet (e.g., 'I can't on Monday, I'm visiting my grandma')."},{"id":"B","text":"Students convert 20 affirmative sentences into negative and interrogative forms."},{"id":"C","text":"Students memorize the rules for adding '-ing' to verbs."}],"correct":"A","explanation":"Coordinar agendas reales para acordar una reunión utiliza la estructura con un propósito comunicativo auténtico ('use')."},
+            {"id":27,"text":"A teacher wants to teach 'for' and 'since' using the Inductive Approach. Which strategy is appropriate?","options":[{"id":"A","text":"Write the rule for 'for' and 'since' on the board and give examples."},{"id":"B","text":"Have students highlight sentences with 'for' and 'since' in a reading text, compare what follows each word in pairs, and deduce the rule."},{"id":"C","text":"Ask students to translate ten sentences from Spanish into English."}],"correct":"B","explanation":"En el enfoque inductivo, los estudiantes analizan ejemplos en contexto primero y descubren la regla gramatical por sí mismos."},
+            {"id":28,"text":"At the start of a unit on 'Environment', the teacher wants to conduct a diagnostic assessment of prior vocabulary. Which activity is appropriate?","options":[{"id":"A","text":"Give a graded final test on conditional sentences."},{"id":"B","text":"Pre-teach 15 words and take a spelling dictation."},{"id":"C","text":"Have students brainstorm environmental problems they see in their town using a mind map."}],"correct":"C","explanation":"Una lluvia de ideas al inicio de la unidad permite diagnosticar qué vocabulario y saberes previos traen los estudiantes sin calificarlos."},
+            {"id":29,"text":"Students have brainstormed ideas for an essay. Now the teacher wants them to make an outline. Which instruction is appropriate?","options":[{"id":"A","text":"'Organize your main thesis and supporting points for each paragraph using brief bullet points before writing full paragraphs.'"},{"id":"B","text":"'Write the complete essay right now and check your punctuation.'"},{"id":"C","text":"'Copy the model essay from the board changing only the adjectives.'"}],"correct":"A","explanation":"Hacer un esquema (outline) implica jerarquizar la idea principal y los puntos secundarios de forma breve antes de redactar el borrador."},
+            {"id":30,"text":"Which set of expressions is appropriate to practice the function 'Expressing regrets about the past'?","options":[{"id":"A","text":"'Chances are that...', 'My guess is that...'"},{"id":"B","text":"'I wish I hadn't said that...', 'If only I had studied harder...', 'I shouldn't have arrived late.'"},{"id":"C","text":"'As a rule...', 'By and large...'"}],"correct":"B","explanation":"Estructuras como 'I wish I hadn't...', 'If only I had...' y 'shouldn't have + participle' expresan arrepentimiento sobre acciones pasadas."},
+            {"id":31,"text":"During a first reading for general understanding (gist), a student raises his hand and asks for the meaning of the word 'Nonetheless'. What should the teacher do?","options":[{"id":"A","text":"Remind the student that the current goal is understanding the general idea, and mention that vocabulary will be checked after the first reading."},{"id":"B","text":"Stop the class and explain the grammar of connectors on the board."},{"id":"C","text":"Translate the text into Spanish sentence by sentence."}],"correct":"A","explanation":"En la primera lectura (skimming/gist), no se debe interrumpir el flujo lector; el vocabulario específico se trabaja después."},
+            {"id":32,"text":"After students answer reading comprehension questions individually, the teacher asks them to compare their answers in pairs before sharing with the whole class. What is the main pedagogical purpose of this step?","options":[{"id":"A","text":"To save time grading papers."},{"id":"B","text":"To build students' confidence and allow peer support before speaking in front of the whole class."},{"id":"C","text":"To test their pronunciation of minimal pairs."}],"correct":"B","explanation":"El 'pair-check' reduce el filtro afectivo (ansiedad) y brinda seguridad a los estudiantes antes de participar en plenaria."},
+            {"id":33,"text":"Which of the following is an authentic listening resource for third-grade secondary students?","options":[{"id":"A","text":"An audio recorded slowly by the teacher reading a textbook dialogue."},{"id":"B","text":"A graded audio track from a beginner workbook repeating isolated verbs."},{"id":"C","text":"An original short podcast episode recorded by native speakers reviewing a popular movie."}],"correct":"C","explanation":"Un material auténtico es aquel creado para propósitos comunicativos reales (como un podcast real), no diseñado artificialmente para enseñar gramática."},
+            {"id":34,"text":"Students are reading the review of a laptop: 'This laptop is lightweight, fast, and affordable.' The teacher asks them to paraphrase it orally. Which student demonstrates paraphrasing skills?","options":[{"id":"A","text":"Ana: 'This laptop is lightweight, fast, and affordable.'"},{"id":"B","text":"Luis: 'The computer is easy to carry, works quickly, and has a reasonable price.'"},{"id":"C","text":"Pedro: 'I don't like laptops because desktop computers are better for gaming.'"}],"correct":"B","explanation":"Parafrasear consiste en expresar exactamente la misma idea original utilizando sinónimos y estructuras propias sin cambiar el sentido."},
+            {"id":35,"text":"In a role-play, students use: 'I see your point, and I'd also like to add that...', 'You're right about that, building on your idea...'. Which language function are they practicing?","options":[{"id":"A","text":"Acknowledging and building on others' ideas."},{"id":"B","text":"Rejecting an offer politely."},{"id":"C","text":"Expressing disappointment."}],"correct":"A","explanation":"Estas frases validan la idea del interlocutor y construyen un argumento adicional sobre ella ('Acknowledging ideas')."},
+            {"id":36,"text":"A teacher wants to start her 8:00 AM class with a five-minute 'warm-up' because students look sleepy and unmotivated. Which activity is strictly a warm-up (energizer)?","options":[{"id":"A","text":"A quick movement game ('Simon Says' or 'Charades') to raise energy and create a positive classroom atmosphere."},{"id":"B","text":"A 30-minute grammar lecture on passive voice."},{"id":"C","text":"A silent written reading test."}],"correct":"A","explanation":"Un warm-up busca romper el hielo, elevar la energía y motivar al inicio de la sesión mediante un juego breve o activador."},
+            {"id":37,"text":"Before students write a graduation speech, the teacher asks: 'Is a graduation speech formal or informal? Who will be listening to you? What is your goal?' What kind of questions are these?","options":[{"id":"A","text":"Instruction checking questions (ICQs)."},{"id":"B","text":"Concept checking questions (CCQs) about the communicative situation and genre."},{"id":"C","text":"Rhetorical questions."}],"correct":"B","explanation":"Estas preguntas verifican si los estudiantes comprenden los conceptos clave del género discursivo (registro, audiencia, propósito)."},
+            {"id":38,"text":"Students are listening to an audio where a speaker explains why plastic bags should be banned. Afterwards, the teacher asks: 'Do you agree with the speaker's arguments? Would a plastic ban work in our community? Why?' Which skill is developed?","options":[{"id":"A","text":"Listening for specific words."},{"id":"B","text":"Critical thinking skills (evaluating and taking a stance)."},{"id":"C","text":"Bottom-up phoneme discrimination."}],"correct":"B","explanation":"Juzgar la validez de los argumentos de un hablante y contrastarlos con su propia realidad desarrolla el pensamiento crítico."},
+            {"id":39,"text":"While presenting in English, students often hesitate and say 'este...' or 'bueno...'. How should the teacher help them sound more natural?","options":[{"id":"A","text":"Punish them by lowering their grade every time they hesitate."},{"id":"B","text":"Teach and display natural English fillers on the board ('Well...', 'You know...', 'Let me see...', 'I mean...') so they can use them while thinking."},{"id":"C","text":"Forbid any pauses during oral presentations."}],"correct":"B","explanation":"Enseñar 'fillers' naturales en inglés les brinda herramientas reales para mantener el turno de habla mientras organizan sus ideas."},
+            {"id":40,"text":"A teacher gives students an article with missing linking words (blank spaces) and asks them to fill in the blanks with 'however', 'therefore', 'furthermore', or 'although'. Which aspect of writing is practiced?","options":[{"id":"A","text":"Cohesion."},{"id":"B","text":"Fluency."},{"id":"C","text":"Paraverbal communication."}],"correct":"A","explanation":"El uso adecuado de conectores lógicos y palabras de referencia para enlazar oraciones desarrolla directamente la cohesión escrita."},
+            {"id":41,"text":"During a speaking activity, a student says: 'I go to travel to Lima tomorrow.' The teacher wants the student to self-correct using the 'Repetition' technique. What should the teacher say?","options":[{"id":"A","text":"'I am going to travel to Lima tomorrow.'"},{"id":"B","text":"'I go to travel?' (repeating the error with rising intonation)."},{"id":"C","text":"'You made a mistake with the future tense.'"}],"correct":"B","explanation":"En la técnica de Repetition, el docente repite la parte errónea con entonación de pregunta para que el estudiante note el fallo y se autocorrija."},
+            {"id":42,"text":"A teacher wants to assess her students' reading comprehension of a story through a formative assessment activity. Which is NOT appropriate for formative assessment?","options":[{"id":"A","text":"Monitoring pairs while they create a story map and giving them immediate feedback to improve comprehension."},{"id":"B","text":"Using a rubric at the end of the unit just to assign a final numerical grade without giving any feedback."},{"id":"C","text":"Asking open-ended questions during class and guiding students who misunderstood a paragraph."}],"correct":"B","explanation":"Asignar únicamente una nota numérica final sin retroalimentación corresponde a una evaluación sumativa, no formativa."},
+            {"id":43,"text":"A second-grade student wrote: 'My mother is a teacher. She wakes up 6 am. She goes school 7 am.' Which aspect should the teacher prioritize when revising this text?","options":[{"id":"A","text":"Prepositions of time and direction ('at 6 am', 'to school')."},{"id":"B","text":"Subject-verb agreement."},{"id":"C","text":"Word order of adjectives."}],"correct":"A","explanation":"La conjugación en tercera persona ('is', 'wakes', 'goes') es correcta; el error sistemático en todo el texto es la omisión de preposiciones ('at', 'to')."},
+            {"id":44,"text":"In a lesson using the PPP (Presentation-Practice-Production) method, the teacher presents comparative adjectives using pictures, and then gives students a worksheet to fill in the blanks with comparative forms. Then the class ends. Which stage was missing?","options":[{"id":"A","text":"The Presentation stage."},{"id":"B","text":"The Practice stage."},{"id":"C","text":"The Production stage."}],"correct":"C","explanation":"El docente presentó la estructura (Presentation) e hizo práctica controlada (Practice), pero omitió la etapa de producción libre y comunicativa (Production)."},
+            {"id":45,"text":"Before reading 'The Next Wave of Robotics', the teacher sticks six pictures on the walls representing key vocabulary from the text and asks students to walk around in pairs and write on post-its what they think each picture represents. What is the main purpose of this pre-reading activity?","options":[{"id":"A","text":"To pre-teach key lexical items in a visual, active, and collaborative way."},{"id":"B","text":"To evaluate students' final reading comprehension."},{"id":"C","text":"To practice intensive bottom-up phonics."}],"correct":"A","explanation":"Usar imágenes y trabajo colaborativo antes de la lectura permite familiarizar a los alumnos con el vocabulario clave de forma significativa."},
+            {"id":46,"text":"CLOZE TEST (46-60): Artificial Intelligence in Education.\nIn recent years, artificial intelligence (AI) has begun to transform classrooms worldwide. Many educators are (46) ______ for effective ways to integrate AI tools without replacing human interaction.","options":[{"id":"A","text":"finding"},{"id":"B","text":"looking"},{"id":"C","text":"watching"}],"correct":"B","explanation":"El phrasal verb que significa 'buscar' y rige la preposición 'for' es 'look for' ('looking for effective ways')."},
+            {"id":47,"text":"CLOZE: When used responsibly, AI platforms (47) ______ provide personalized practice tailored to each student's learning pace.","options":[{"id":"A","text":"can"},{"id":"B","text":"ought"},{"id":"C","text":"able"}],"correct":"A","explanation":"El verbo modal 'can' va seguido directamente del verbo base 'provide' para expresar capacidad o posibilidad."},
+            {"id":48,"text":"CLOZE: For example, adaptive apps analyze a learner's mistakes and offer immediate exercises that are (48) ______ to their specific needs.","options":[{"id":"A","text":"beneficial"},{"id":"B","text":"profitable"},{"id":"C","text":"wealthy"}],"correct":"A","explanation":"'Beneficial to' significa provechoso o beneficioso para las necesidades de aprendizaje del estudiante."},
+            {"id":49,"text":"CLOZE: Furthermore, these digital tools help (49) ______ students' confidence by allowing them to practice pronunciation in a safe environment.","options":[{"id":"A","text":"rise"},{"id":"B","text":"boost"},{"id":"C","text":"grow"}],"correct":"B","explanation":"'Boost confidence' es la colocación natural en inglés para 'elevar o fortalecer la confianza'."},
+            {"id":50,"text":"CLOZE: However, the positive impact of technology can only be (50) ______ to good pedagogy when teachers guide the process.","options":[{"id":"A","text":"attributed"},{"id":"B","text":"delivered"},{"id":"C","text":"donated"}],"correct":"A","explanation":"La colocación pasiva 'be attributed to' significa 'ser atribuido a'."},
+            {"id":51,"text":"CLOZE: Technology alone cannot replace empathy. (51) ______, AI chatbots lack the emotional intelligence required to support a struggling teenager.","options":[{"id":"A","text":"Indeed"},{"id":"B","text":"Despite"},{"id":"C","text":"Whereas"}],"correct":"A","explanation":"'Indeed' (De hecho / En efecto) refuerza y ejemplifica la afirmación previa sobre los límites de la tecnología."},
+            {"id":52,"text":"CLOZE: Another concern is that students might spend too much time (52) ______ screens instead of collaborating face-to-face with their peers.","options":[{"id":"A","text":"at"},{"id":"B","text":"on"},{"id":"C","text":"in"}],"correct":"B","explanation":"La expresión idiomática correcta es 'spend time ON screens' (pasar tiempo en las pantallas)."},
+            {"id":53,"text":"CLOZE: Some schools have restricted smartphone use during breaks (53) ______ students can interact more with their classmates.","options":[{"id":"A","text":"because of"},{"id":"B","text":"due to"},{"id":"C","text":"so that"}],"correct":"C","explanation":"'So that' introduce una oración completa con verbo modal ('so that students can interact') para expresar propósito."},
+            {"id":54,"text":"CLOZE: Experts warn that relying entirely on AI to write essays (54) ______ weaken students' critical thinking skills.","options":[{"id":"A","text":"would"},{"id":"B","text":"ought"},{"id":"C","text":"used"}],"correct":"A","explanation":"'Would weaken' expresa la consecuencia hipotética negativa de depender totalmente de la IA."},
+            {"id":55,"text":"CLOZE: Instead, schools should (55) ______ clear ethical guidelines so learners use AI as a study partner rather than a shortcut.","options":[{"id":"A","text":"hand"},{"id":"B","text":"provide"},{"id":"C","text":"grant"}],"correct":"B","explanation":"'Provide guidelines' significa 'proporcionar o brindar pautas claras'."},
+            {"id":56,"text":"CLOZE: A recent survey found that after teachers had trained their students in ethical AI use for one term, academic dishonesty (56) ______ noticeably.","options":[{"id":"A","text":"has dropped"},{"id":"B","text":"drops"},{"id":"C","text":"dropped"}],"correct":"C","explanation":"La acción principal ocurrida después del entrenamiento pasado ('after teachers had trained...') se expresa en Past Simple ('dropped')."},
+            {"id":57,"text":"CLOZE: These results suggest that teacher guidance is essential in (57) ______ the misuse of technology in schools.","options":[{"id":"A","text":"giving up"},{"id":"B","text":"warding off"},{"id":"C","text":"turning in"}],"correct":"B","explanation":"El phrasal verb 'ward off' (o 'fight off') significa 'prevenir o evitar un peligro o mal uso'."},
+            {"id":58,"text":"CLOZE: (58) ______ AI continues to evolve rapidly, the core of education will always be the human bond between teachers and students.","options":[{"id":"A","text":"Despite"},{"id":"B","text":"Although"},{"id":"C","text":"However"}],"correct":"B","explanation":"'Although' (Aunque) es una conjunción concesiva seguida de sujeto y verbo ('AI continues...')."},
+            {"id":59,"text":"CLOZE: When lessons are interactive and (59) ______, students feel genuinely motivated to learn a foreign language.","options":[{"id":"A","text":"dull"},{"id":"B","text":"engaging"},{"id":"C","text":"rough"}],"correct":"B","explanation":"'Engaging' significa atractivo, interesante o motivador, en coherencia con 'interactive'."},
+            {"id":60,"text":"CLOZE: Therefore, we should embrace innovation (60) ______ its potential to enrich learning, while keeping human values at the center.","options":[{"id":"A","text":"for"},{"id":"B","text":"by"},{"id":"C","text":"about"}],"correct":"A","explanation":"'Embrace something FOR its potential' indica la razón o cualidad por la cual se adopta algo."}
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isLight = false;
+
+        const quizContainer = document.getElementById('quiz-container');
+        const quizArea = document.getElementById('quiz-area');
+        const progressText = document.getElementById('progress-text');
+        const feedbackArea = document.getElementById('feedback');
+        const explanationBox = document.getElementById('explanation-box');
+        const btnNext = document.getElementById('btn-next');
+        const resultScreen = document.getElementById('result-screen');
+
+        function toggleTheme() {
+            isLight = !isLight;
+            document.body.classList.toggle('light-theme', isLight);
+            document.getElementById('theme-btn').innerText = isLight ? "🌙 Cambiar a Modo Oscuro" : "☀️ Cambiar a Modo Claro";
+        }
+
+        function toggleLanguage() {
+            var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+            if (!iframe) {
+                window.location.hash = "googtrans(en|es)";
+                location.reload();
+            }
+        }
+
+        function renderQuestion() {
+            quizArea.innerHTML = '';
+            feedbackArea.style.display = 'none';
+            explanationBox.style.display = 'none';
+            btnNext.style.display = 'none';
+
+            progressText.innerText = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
+            const q = questions[currentQuestionIndex];
+
+            const qDiv = document.createElement('div');
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerHTML = `<strong>Pregunta ${q.id}:</strong><br><br>` + q.text.replace(/\n/g, '<br>');
+            qDiv.appendChild(qText);
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerHTML = `<strong>${String.fromCharCode(65 + index)})</strong> ${opt.text}`;
+                btn.onclick = () => selectAnswer(btn, opt.id, q.correct, q.explanation);
+                btn.dataset.id = opt.id;
+                qDiv.appendChild(btn);
+            });
+
+            quizArea.appendChild(qDiv);
+        }
+
+        function selectAnswer(selectedBtn, selectedId, correctId, explanation) {
+            const buttons = document.querySelectorAll('.option');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedId === correctId) {
+                selectedBtn.classList.add('correct');
+                feedbackArea.textContent = '¡Correcto! ✔️';
+                feedbackArea.className = 'feedback-correct';
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+                const correctBtn = document.querySelector(`.option[data-id="${correctId}"]`);
+                if (correctBtn) correctBtn.classList.add('correct');
+                feedbackArea.textContent = `❌ Incorrecto. La alternativa correcta era la ${correctId}.`;
+                feedbackArea.className = 'feedback-incorrect';
+            }
+
+            explanationBox.innerHTML = `<strong>💡 Explicación pedagógica:</strong><br>${explanation}`;
+            explanationBox.style.display = 'block';
+            feedbackArea.style.display = 'block';
+            btnNext.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+                window.scrollTo(0, 0);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultScreen.style.display = 'block';
+            document.getElementById('final-score').textContent = `${score} / ${questions.length}`;
+            const pct = score / questions.length;
+            document.getElementById('final-message').textContent = pct >= 0.8
+                ? '¡Extraordinario! Dominas los criterios del Temario 2026 del MINEDU.'
+                : pct >= 0.6
+                ? '¡Muy buen puntaje! Repasa las explicaciones de las preguntas con error para asegurar tu ascenso.'
+                : 'Sigue practicando paso a paso con la retroalimentación pedagógica.';
+        }
+
+        if (window.location.hash.includes("googtrans(en|es)")) {
+            document.getElementById('lang-btn').innerText = "🔄 Restaurar a Inglés original";
+            document.getElementById('lang-btn').onclick = function() {
+                window.location.hash = "";
+                location.reload();
+            };
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
