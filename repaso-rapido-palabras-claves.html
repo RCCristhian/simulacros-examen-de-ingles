@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPASO RÁPIDO - PALABRAS CLAVES</title>
+    <style>
+        :root {
+            --bg-body: #121212;
+            --bg-container: #1e1e1e;
+            --bg-card: #262626;
+            --text-main: #e0e0e0;
+            --text-muted: #b0bec5;
+            --border-color: #37474f;
+            --primary: #00838f;
+            --primary-hover: #006064;
+            --accent: #4dd0e1;
+            --badge-bg: #004d40;
+            --badge-text: #a7ffeb;
+            --answer-bg: #1b5e20;
+            --answer-text: #c8e6c9;
+        }
+
+        body.light-theme {
+            --bg-body: #f4f7f6;
+            --bg-container: #ffffff;
+            --bg-card: #f8f9fa;
+            --text-main: #2c3e50;
+            --text-muted: #546e7a;
+            --border-color: #cfd8dc;
+            --primary: #1565c0;
+            --primary-hover: #0d47a1;
+            --accent: #0d47a1;
+            --badge-bg: #e3f2fd;
+            --badge-text: #0d47a1;
+            --answer-bg: #d4edda;
+            --answer-text: #155724;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background: var(--bg-container);
+            max-width: 900px;
+            width: 100%;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .theme-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .theme-btn:hover { background: var(--primary-hover); }
+
+        h1 { text-align: center; font-size: 26px; margin: 5px 0; }
+        h2 { text-align: center; color: var(--text-muted); font-size: 16px; margin-top: 0; margin-bottom: 20px; }
+
+        .search-box {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px 18px;
+            font-size: 17px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            background: var(--bg-card);
+            color: var(--text-main);
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 9px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 6px solid var(--primary);
+            border-radius: 10px;
+            padding: 16px 20px;
+            transition: transform 0.15s ease;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .category-badge {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .answer-pill {
+            background: var(--answer-bg);
+            color: var(--answer-text);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .trigger-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 6px 0;
+        }
+
+        .keywords {
+            font-size: 14px;
+            color: var(--accent);
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .count-info {
+            text-align: right;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <a href="index.html" class="theme-btn" style="text-decoration: none; display: inline-flex; align-items: center;">🏠 Menú Principal</a>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️ Cambiar a Modo Claro</button>
+            </div>
+        </div>
+
+        <h1>REPASO RÁPIDO - PALABRAS CLAVES</h1>
+        <h2>Ascenso EBR Secundaria - Inglés (Trucos y Respuestas Directas)</h2>
+
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Buscar palabra clave (ej. Skimming, Recast, DUA, Cohesion, Gist...)" oninput="filterCards()">
+
+        <div class="filters" id="filterButtons">
+            <button class="filter-btn active" onclick="setCategory('ALL', this)">Todos (48)</button>
+            <button class="filter-btn" onclick="setCategory('DUA e Inclusión', this)">DUA e Inclusión</button>
+            <button class="filter-btn" onclick="setCategory('Reading y Listening', this)">Reading & Listening</button>
+            <button class="filter-btn" onclick="setCategory('Writing', this)">Writing</button>
+            <button class="filter-btn" onclick="setCategory('Speaking y Feedback', this)">Speaking & Feedback</button>
+            <button class="filter-btn" onclick="setCategory('Metodologías y Gramática', this)">Metodologías y Gramática</button>
+            <button class="filter-btn" onclick="setCategory('Cognitivos y Evaluación', this)">Cognitivos y Evaluación</button>
+            <button class="filter-btn" onclick="setCategory('Fijos Cloze Test', this)">Fijos Cloze Test</button>
+        </div>
+
+        <div class="count-info" id="countInfo">Mostrando 48 conceptos clave</div>
+        <div class="cards-grid" id="cardsContainer"></div>
+    </div>
+
+    <script>
+        const cheatSheetData = [
+            // DUA E INCLUSIÓN
+            { cat: "DUA e Inclusión", answer: "Multiple means of representation", trigger: "El docente presenta el contenido usando varios formatos: texto escrito, audio, imágenes, canciones o videos.", keys: "Written text + audio + video / Visual aids / Access information" },
+            { cat: "DUA e Inclusión", answer: "Multiple means of action and expression", trigger: "El docente permite que los alumnos elijan CÓMO demostrar lo aprendido (escribir un ensayo, grabar un podcast o hacer un cómic).", keys: "Demonstrate what they learned / Essay, podcast, or comic strip" },
+            { cat: "DUA e Inclusión", answer: "Multiple means of engagement", trigger: "El docente promueve la motivación, el interés y la autonomía permitiendo elegir temas según sus preferencias.", keys: "Motivation / Interests / Autonomy / Choice" },
+            { cat: "DUA e Inclusión", answer: "Inclusive Approach / Education", trigger: "Adaptar materiales (letra grande y audio para baja visión) o incluir personajes de diversas culturas y habilidades promoviendo el respeto.", keys: "Visual impairment / Larger font / Diverse backgrounds and abilities" },
+            { cat: "DUA e Inclusión", answer: "Environmental Approach", trigger: "Actividades o pósteres enfocados en el reciclaje, cuidado del entorno y reducción del uso de plástico en la escuela o comunidad.", keys: "Recycling / Reducing plastic / Environmental awareness" },
+
+            // READING Y LISTENING
+            { cat: "Reading y Listening", answer: "Top-down processing", trigger: "Usar conocimientos previos, títulos e imágenes para hacer hipótesis y entender el mensaje general antes de ir al detalle.", keys: "Title and pictures / Guess main conflict / Background knowledge" },
+            { cat: "Reading y Listening", answer: "Bottom-up processing", trigger: "Decodificar las unidades más pequeñas del idioma: distinguir fonemas o sonidos vocálicos como /ɪ/ en 'ship' vs. /i:/ en 'sheep'.", keys: "Distinguish vowel sounds / Phonemes / Ship vs. Sheep" },
+            { cat: "Reading y Listening", answer: "Skimming (Reading) / Listening for gist (Audio)", trigger: "Leer o escuchar rápidamente (ej. en 1 minuto) solo para identificar el tema principal o evento central sin detenerse en detalles.", keys: "Main topic / Main event / General idea / Quickly" },
+            { cat: "Reading y Listening", answer: "Scanning (Reading) / Listening for specific info", trigger: "Buscar rápidamente un dato puntual ignorando el resto: horario del museo, precio de entradas, año del Premio Nobel o número de puerta de vuelo.", keys: "Opening hours / Price / Exact year / Gate number" },
+            { cat: "Reading y Listening", answer: "Inferring attitude", trigger: "Deducir cómo se siente el hablante (emocionado, decepcionado o sarcástico como 'A fly in my soup!') guiándose por su tono de voz.", keys: "Tone of voice / How does the speaker feel? / Irony" },
+            { cat: "Reading y Listening", answer: "Deducing meaning from context", trigger: "Adivinar el significado de una palabra desconocida ('hilarious', 'exhausted') usando las pistas del resto de la oración sin usar diccionario.", keys: "Guess the meaning / Surrounding sentence / Context clues" },
+            { cat: "Reading y Listening", answer: "Extensive reading", trigger: "Los estudiantes eligen libremente libros (graded readers) de la biblioteca para leer en casa por placer, sin exámenes ni cuestionarios obligatorios.", keys: "Read for pleasure / Enjoyment / No comprehension quizzes" },
+            { cat: "Reading y Listening", answer: "Summarizing", trigger: "Condensar un texto largo (de 3 páginas o 5 párrafos) escribiendo únicamente el mensaje central o los eventos esenciales en 2 oraciones.", keys: "Core message in two sentences / Most essential events" },
+            { cat: "Reading y Listening", answer: "Categorizing", trigger: "Clasificar palabras o ideas del texto en una tabla o bajo encabezados (ej. columna de 'Advantages' y columna de 'Disadvantages').", keys: "Create a table / Group words under headings / Advantages vs. Disadvantages" },
+            { cat: "Reading y Listening", answer: "Predicting content", trigger: "Pausar un video o lectura a la mitad y preguntar a los alumnos qué creen que hará el personaje principal a continuación.", keys: "Pauses halfway / What will the character do next?" },
+            { cat: "Reading y Listening", answer: "Detecting connectors", trigger: "Pedir a los estudiantes que levanten la mano cada vez que escuchen palabras de enlace como 'because', 'but' o 'so'.", keys: "Raise hands when hearing 'because', 'but', 'so' / Discourse markers" },
+            { cat: "Reading y Listening", answer: "Paraphrasing", trigger: "Expresar la misma idea de un texto o audio utilizando palabras y estructuras propias (sinónimos) sin alterar el significado.", keys: "Say it in your own words / Same meaning, different words" },
+
+            // WRITING
+            { cat: "Writing", answer: "Process writing", trigger: "Seguir las etapas de creación escrita: lluvia de ideas (brainstorming), borrador (draft), revisión entre pares (revising), edición (editing) y publicación.", keys: "Brainstorm -> Draft -> Peer review -> Edit -> Publish" },
+            { cat: "Writing", answer: "Product writing", trigger: "Dar a los alumnos un modelo perfecto de carta para que analicen su estructura y escriban una casi idéntica cambiando solo nombres y fechas.", keys: "Perfect model / Imitate structure / Almost identical letter" },
+            { cat: "Writing", answer: "Revising (Stage of Writing)", trigger: "Después del primer borrador, el alumno vuelve a leer su texto para verificar si las ideas están conectadas lógicamente y si el mensaje es claro.", keys: "Check if ideas are logically connected / Overall message is clear" },
+            { cat: "Writing", answer: "Editing (Stage of Writing)", trigger: "Luego de revisar el contenido, el alumno verifica errores mecánicos: ortografía (spelling), uso de mayúsculas (capitalization) y puntuación.", keys: "Check for spelling errors, capitalization, and punctuation" },
+            { cat: "Writing", answer: "Coherence", trigger: "El párrafo tiene buena gramática y conectores, pero las ideas saltan al azar de un tema a otro sin seguir una secuencia lógica.", keys: "Ideas jump randomly / Without a logical sequence / Unity of topic" },
+            { cat: "Writing", answer: "Cohesion", trigger: "Las oraciones tienen buenas ideas pero parecen sueltas o desconectadas; el docente sugiere agregar conectores como 'However', 'Therefore' o 'Furthermore'.", keys: "Sentences seem disconnected / Linking words: However, Therefore" },
+            { cat: "Writing", answer: "Adapting texts to the communicative situation", trigger: "Ajustar el registro (formal vs. informal) según el destinatario: reescribir un texto académico como post para adolescentes o mensaje de WhatsApp a un amigo.", keys: "Formal vs. Casual / Email to a friend vs. boss / WhatsApp message" },
+
+            // SPEAKING Y FEEDBACK
+            { cat: "Speaking y Feedback", answer: "Nonverbal sources", trigger: "Enfocarse en el lenguaje corporal durante una exposición: contacto visual (eye contact), gestos con las manos, postura corporal y sonreír.", keys: "Eye contact / Hand gestures / Body posture / Smile" },
+            { cat: "Speaking y Feedback", answer: "Paraverbal sources", trigger: "Enfocarse en los aspectos vocales al hablar o leer un poema en voz alta: entonación (intonation), volumen de voz y ritmo.", keys: "Intonation / Volume / Rhythm / Tone of voice" },
+            { cat: "Speaking y Feedback", answer: "Developing argumentation skills", trigger: "Organizar un debate donde los alumnos deben defender u oponerse a una idea (ej. uso de uniformes o IA) dando razones y refutando al otro equipo.", keys: "Classroom debate / Defend or oppose / Counter-arguments" },
+            { cat: "Speaking y Feedback", answer: "Fluency & Delayed feedback", trigger: "En una actividad de habla libre (free speaking / role-play), NO se debe interrumpir al alumno; se anotan los errores en un cuaderno y se corrigen al final de la clase.", keys: "Avoid interrupting flow / Prioritize fluency / Correct at the end" },
+            { cat: "Speaking y Feedback", answer: "Recast (Feedback technique)", trigger: "El alumno dice 'Yesterday I goed / buyed...' y el docente responde de forma natural y conversacional: 'Oh, you went / bought...? What movie did you see?'", keys: "Reformulate naturally without breaking communication" },
+            { cat: "Speaking y Feedback", answer: "Elicitation", trigger: "Cuando un alumno olvida una palabra, el docente hace una pausa, un gesto y dice 'You went to the...?' esperando que el propio alumno diga 'cinema'.", keys: "Teacher pauses and prompts 'You went to the...?' / Student completes" },
+            { cat: "Speaking y Feedback", answer: "Clarification request / Repetition", trigger: "El docente pide aclarar ('Excuse me, could you repeat that?') o repite el error con entonación de pregunta para que el alumno se autocorrija.", keys: "Rising intonation / Ask student to repeat or clarify" },
+
+            // METODOLOGÍAS Y GRAMÁTICA
+            { cat: "Metodologías y Gramática", answer: "Inductive approach", trigger: "El docente muestra ejemplos en contexto ('If it rains...', 'bigger than') sin explicar la regla, para que los alumnos analicen y descubran el patrón por sí mismos.", keys: "Analyze sentences / Discover the grammar pattern by themselves" },
+            { cat: "Metodologías y Gramática", answer: "Deductive approach", trigger: "El docente inicia escribiendo la fórmula en la pizarra ('Subject + will + verb'), explica la regla de uso y entrega una ficha para rellenar espacios.", keys: "Writes formula on the board first / Explains rule / Fill-in-the-blanks" },
+            { cat: "Metodologías y Gramática", answer: "Prioritizing 'Use' over 'Usage'", trigger: "En lugar de memorizar tablas o rellenar espacios, los alumnos hacen un role-play comunicativo (entrevista de trabajo, pedir algo en un hotel, consulta médica).", keys: "Use = communicative meaning in real contexts / Role-play" },
+            { cat: "Metodologías y Gramática", answer: "Task-Based Learning (TBL)", trigger: "Los alumnos realizan primero una tarea comunicativa en grupos (planear un viaje o fiesta sorpresa) y SOLO AL FINAL (post-task) el docente resalta la gramática usada.", keys: "Complete a task first / Highlight useful grammar after the task" },
+            { cat: "Metodologías y Gramática", answer: "Project-Based Learning (PBL)", trigger: "Durante un mes, los alumnos investigan un problema real (perros callejeros o turismo local) y elaboran un producto final público (campaña o guía turística).", keys: "Over the course of a month / Investigate problem / Final product" },
+            { cat: "Metodologías y Gramática", answer: "Presentation-Practice-Production (PPP)", trigger: "Stage 1: presenta vocabulario con flashcards. Stage 2: ejercicio controlado de emparejar (matching). Stage 3: describen sus propios dormitorios en parejas.", keys: "Flashcards (Stage 1) -> Matching (Stage 2) -> Free description (Stage 3)" },
+            { cat: "Metodologías y Gramática", answer: "Content-Based Learning", trigger: "El profesor de Inglés colabora con el de Ciencia y los alumnos aprenden el ciclo del agua usando el inglés como medio de instrucción.", keys: "Learn Science/History content using English as medium of instruction" },
+            { cat: "Metodologías y Gramática", answer: "Cooperative Learning (Jigsaw)", trigger: "El docente divide un texto en cuatro partes, asigna una parte a cada miembro del grupo y todos deben compartir su parte para entender el texto completo.", keys: "Jigsaw technique / Divide text into parts / Positive interdependence" },
+            { cat: "Metodologías y Gramática", answer: "Blended Learning (Flipped Classroom)", trigger: "Los alumnos ven videos de gramática y hacen ejercicios en una plataforma online en casa, y usan el tiempo de clase presencial puramente para hablar.", keys: "Online platform at home + Class time for communicative speaking" },
+
+            // COGNITIVOS Y EVALUACIÓN
+            { cat: "Cognitivos y Evaluación", answer: "Activating prior knowledge", trigger: "Antes de leer o escuchar, el docente pregunta 'What do you already know about Mars?' o hace una lluvia de ideas con la palabra 'FESTIVAL' en la pizarra.", keys: "What do you already know? / Shout out words associated with..." },
+            { cat: "Cognitivos y Evaluación", answer: "Cognitive conflict (Disonancia cognitiva)", trigger: "El alumno cree una regla errónea (todos los verbos en pasado suenan /t/ o 'advices' tiene plural) y el docente muestra un audio o diccionario que contradice su creencia.", keys: "Contradicts previous assumption / Students look confused and adjust" },
+            { cat: "Cognitivos y Evaluación", answer: "Scaffolding (Andamiaje)", trigger: "El docente brinda un apoyo temporal para superar un bloqueo: susurra una frase de inicio ('You can start by saying...') o da un organizador gráfico con sentence starters.", keys: "Temporary support / Sentence starters / Graphic organizer" },
+            { cat: "Cognitivos y Evaluación", answer: "Meaningful learning (Aprendizaje significativo)", trigger: "Conectar el vocabulario de comida o rutinas diarias con lo que los estudiantes y sus familias realmente comen o hacen los domingos en su ciudad.", keys: "Connect to students' real life, home, and personal experiences" },
+            { cat: "Cognitivos y Evaluación", answer: "High cognitive demand", trigger: "En lugar de memorizar listas, los alumnos evalúan un artículo controversial y crean sus propios contraargumentos en inglés.", keys: "Evaluate controversial article / Create counter-arguments / Critical thinking" },
+            { cat: "Cognitivos y Evaluación", answer: "Metacognition", trigger: "Al final de la sesión o unidad, los alumnos reflexionan sobre: 'What did I learn today? How did I learn it? What strategies helped me learn best?'", keys: "Reflect on how they learned and which strategies worked best" },
+            { cat: "Cognitivos y Evaluación", answer: "Formative vs. Peer vs. Self-assessment", trigger: "• Docente da sugerencias durante el proceso sin nota = Formative.\n• Compañeros se evalúan con rúbrica = Peer-assessment.\n• Alumno evalúa su propio esfuerzo = Self-assessment.", keys: "Immediate suggestions (Formative) / Exchange papers (Peer) / Own performance (Self)" },
+
+            // FIJOS CLOZE TEST
+            { cat: "Fijos Cloze Test", answer: "Collocations y Gramática Fija del Cloze", trigger: "• a large NUMBER of books (contable) | fewer opportunities (contable)\n• focus ON / spend time ON / suffer FROM\n• choose their OWN books | at their own PACE | keep a reading LOG\n• BOOST motivation / confidence | EXPAND vocabulary | reading FLUENCY\n• PROVIDE a library | ASSESS if students read | CONSIDER + verb-ING\n• Second Conditional: If + Past Simple, ... WOULD + verb.", keys: "Cloze Test 46-60 / Phrasal verbs / Prepositions / Conditionals" }
+        ];
+
+        let currentCategory = 'ALL';
+        let isLight = false;
+
+        function toggleTheme() {
+            isLight = !isLight;
+            document.body.classList.toggle('light-theme', isLight);
+            document.getElementById('theme-btn').innerText = isLight ? "🌙 Cambiar a Modo Oscuro" : "☀️ Cambiar a Modo Claro";
+        }
+
+        function setCategory(cat, btnElement) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            filterCards();
+        }
+
+        function filterCards() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+
+            const filtered = cheatSheetData.filter(item => {
+                const matchesCat = currentCategory === 'ALL' || item.cat === currentCategory;
+                const matchesQuery = !query ||
+                    item.answer.toLowerCase().includes(query) ||
+                    item.trigger.toLowerCase().includes(query) ||
+                    item.keys.toLowerCase().includes(query) ||
+                    item.cat.toLowerCase().includes(query);
+                return matchesCat && matchesQuery;
+            });
+
+            document.getElementById('countInfo').innerText = `Mostrando ${filtered.length} de ${cheatSheetData.length} conceptos clave`;
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="category-badge">${item.cat}</span>
+                        <span class="answer-pill">✅ ${item.answer}</span>
+                    </div>
+                    <div class="trigger-text">${item.trigger.replace(/\n/g, '<br>')}</div>
+                    <div class="keywords">🔑 Palabras clave en el examen: ${item.keys}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        filterCards();
+    </script>
+</body>
+</html>
